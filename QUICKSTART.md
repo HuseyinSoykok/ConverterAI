@@ -1,6 +1,6 @@
 # ConverterAI - Hızlı Başlangıç Kılavuzu 🚀
 
-## 📌 Projeniz Hazır!
+## 📌 ConverterAI Hazır!
 
 ConverterAI başarıyla oluşturuldu. Bu profesyonel doküman dönüştürme sistemi şunları içerir:
 
