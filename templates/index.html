@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConverterAI - AI Destekli Doküman Dönüştürücü</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-sync-alt"></i>
+                <h1>ConverterAI</h1>
+            </div>
+            <p class="tagline">AI Destekli Profesyonel Doküman Dönüştürücü</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            
+            <!-- Upload Section -->
+            <section class="upload-section card">
+                <h2><i class="fas fa-cloud-upload-alt"></i> Dosya Yükle</h2>
+                
+                <div class="drop-zone" id="dropZone">
+                    <div class="drop-zone-content">
+                        <i class="fas fa-file-upload"></i>
+                        <p>Dosyayı buraya sürükleyin veya tıklayın</p>
+                        <span class="file-types">PDF, DOCX, Markdown, HTML</span>
+                    </div>
+                    <input type="file" id="fileInput" accept=".pdf,.docx,.doc,.md,.markdown,.html,.htm" hidden>
+                </div>
+
+                <div class="file-info" id="fileInfo" style="display: none;">
+                    <div class="file-details">
+                        <i class="fas fa-file"></i>
+                        <div>
+                            <p class="file-name" id="fileName"></p>
+                            <p class="file-meta"><span id="fileFormat"></span> • <span id="fileSize"></span></p>
+                        </div>
+                    </div>
+                    <button class="btn-remove" id="removeFile">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Conversion Section -->
+            <section class="conversion-section card" id="conversionSection" style="display: none;">
+                <h2><i class="fas fa-exchange-alt"></i> Dönüştürme Ayarları</h2>
+                
+                <div class="format-selector">
+                    <label for="outputFormat">Hedef Format:</label>
+                    <div class="format-buttons" id="formatButtons"></div>
+                </div>
+
+                <div class="options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="qualityCheck">
+                        <span>AI Kalite Kontrolü (önerilir)</span>
+                    </label>
+                </div>
+
+                <button class="btn btn-primary" id="convertBtn">
+                    <i class="fas fa-magic"></i> Dönüştür
+                </button>
+            </section>
+
+            <!-- Progress Section -->
+            <section class="progress-section card" id="progressSection" style="display: none;">
+                <h2><i class="fas fa-spinner fa-spin"></i> Dönüştürülüyor...</h2>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                
+                <p class="progress-text" id="progressText">İşlem başlatılıyor...</p>
+            </section>
+
+            <!-- Result Section -->
+            <section class="result-section card" id="resultSection" style="display: none;">
+                <h2><i class="fas fa-check-circle"></i> Dönüştürme Tamamlandı!</h2>
+                
+                <div class="result-info">
+                    <div class="result-item">
+                        <i class="fas fa-clock"></i>
+                        <span><strong>İşlem Süresi:</strong> <span id="processingTime"></span> saniye</span>
+                    </div>
+                    
+                    <div class="result-item" id="qualityResult" style="display: none;">
+                        <i class="fas fa-star"></i>
+                        <span><strong>Kalite Skoru:</strong> <span id="qualityScore"></span></span>
+                    </div>
+                </div>
+
+                <div class="warnings" id="warnings" style="display: none;">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Uyarılar</h3>
+                    <ul id="warningsList"></ul>
+                </div>
+
+                <button class="btn btn-success" id="downloadBtn">
+                    <i class="fas fa-download"></i> İndir
+                </button>
+
+                <button class="btn btn-secondary" id="newConversionBtn">
+                    <i class="fas fa-plus"></i> Yeni Dönüştürme
+                </button>
+            </section>
+
+            <!-- Error Section -->
+            <section class="error-section card" id="errorSection" style="display: none;">
+                <h2><i class="fas fa-exclamation-circle"></i> Hata Oluştu</h2>
+                <p class="error-message" id="errorMessage"></p>
+                <button class="btn btn-secondary" id="retryBtn">
+                    <i class="fas fa-redo"></i> Tekrar Dene
+                </button>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 ConverterAI - AI Destekli Doküman Dönüştürücü</p>
+            <p class="footer-note">
+                <i class="fas fa-shield-alt"></i> 
+                Tüm dosyalar yerel olarak işlenir. Verileriniz güvende!
+            </p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

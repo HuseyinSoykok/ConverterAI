@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Comprehensive HTML test document for ConverterAI">
+    <title>Comprehensive HTML Test Document</title>
+    <style>
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #34495e; border-bottom: 2px solid #95a5a6; padding-bottom: 8px; }
+        h3 { color: #7f8c8d; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #bdc3c7; padding: 12px; text-align: left; }
+        th { background-color: #3498db; color: white; font-weight: 600; }
+        tr:nth-child(even) { background-color: #ecf0f1; }
+        code { background-color: #f8f9fa; padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', monospace; }
+        pre { background-color: #2c3e50; color: #ecf0f1; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        blockquote { border-left: 4px solid #3498db; margin: 20px 0; padding: 10px 20px; background-color: #ecf0f1; font-style: italic; }
+        .highlight { background-color: #f39c12; padding: 2px 4px; }
+        .footer { margin-top: 40px; padding-top: 20px; border-top: 2px solid #95a5a6; text-align: center; color: #7f8c8d; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Comprehensive HTML Test Document</h1>
+        <p><strong>Purpose:</strong> Test all HTML elements for conversion quality</p>
+        <p><em>Created:</em> November 10, 2025 | <em>Version:</em> 1.0</p>
+    </header>
+
+    <hr>
+
+    <nav>
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#headings">Headings</a></li>
+            <li><a href="#text">Text Formatting</a></li>
+            <li><a href="#lists">Lists</a></li>
+            <li><a href="#tables">Tables</a></li>
+            <li><a href="#code">Code Blocks</a></li>
+            <li><a href="#media">Media Elements</a></li>
+            <li><a href="#forms">Forms</a></li>
+        </ul>
+    </nav>
+
+    <hr>
+
+    <section id="headings">
+        <h2>1. Heading Hierarchy</h2>
+        <h1>Heading Level 1</h1>
+        <h2>Heading Level 2</h2>
+        <h3>Heading Level 3</h3>
+        <h4>Heading Level 4</h4>
+        <h5>Heading Level 5</h5>
+        <h6>Heading Level 6</h6>
+    </section>
+
+    <hr>
+
+    <section id="text">
+        <h2>2. Text Formatting</h2>
+        
+        <p>This is a <strong>bold text</strong> and this is <b>also bold</b>.</p>
+        
+        <p>This is <em>italic text</em> and this is <i>also italic</i>.</p>
+        
+        <p>This is <strong><em>bold and italic</em></strong> combined.</p>
+        
+        <p>This is <del>deleted text</del> and this is <s>strikethrough</s>.</p>
+        
+        <p>This is <ins>inserted text</ins> and this is <u>underlined</u>.</p>
+        
+        <p>This is <mark>highlighted text</mark> using the mark element.</p>
+        
+        <p>This is <small>small text</small> and this is <sup>superscript</sup> and <sub>subscript</sub>.</p>
+        
+        <p>This is <code>inline code</code> within a sentence.</p>
+        
+        <p>This is <abbr title="HyperText Markup Language">HTML</abbr> abbreviation with tooltip.</p>
+        
+        <p>This is a <q>short inline quotation</q> element.</p>
+        
+        <blockquote cite="https://example.com">
+            <p>This is a block quotation that can span multiple lines. It's typically used for longer quotes and provides proper semantic meaning.</p>
+            <footer>— <cite>Famous Author</cite></footer>
+        </blockquote>
+
+        <p>Mathematical formula: E = mc<sup>2</sup></p>
+        <p>Chemical formula: H<sub>2</sub>O</p>
+    </section>
+
+    <hr>
+
+    <section id="lists">
+        <h2>3. Lists</h2>
+        
+        <h3>3.1 Unordered List</h3>
+        <ul>
+            <li>First item</li>
+            <li>Second item</li>
+            <li>Third item with nested list:
+                <ul>
+                    <li>Nested item 1</li>
+                    <li>Nested item 2</li>
+                    <li>Deep nested:
+                        <ul>
+                            <li>Level 3 item</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>Fourth item</li>
+        </ul>
+
+        <h3>3.2 Ordered List</h3>
+        <ol>
+            <li>First step</li>
+            <li>Second step</li>
+            <li>Third step with nested:
+                <ol type="a">
+                    <li>Sub-step A</li>
+                    <li>Sub-step B</li>
+                    <li>Sub-step C</li>
+                </ol>
+            </li>
+            <li>Fourth step</li>
+        </ol>
+
+        <h3>3.3 Description List</h3>
+        <dl>
+            <dt>HTML</dt>
+            <dd>HyperText Markup Language - the standard markup language for web pages</dd>
+            
+            <dt>CSS</dt>
+            <dd>Cascading Style Sheets - used for styling HTML documents</dd>
+            
+            <dt>JavaScript</dt>
+            <dd>A programming language that enables interactive web pages</dd>
+        </dl>
+    </section>
+
+    <hr>
+
+    <section id="tables">
+        <h2>4. Tables</h2>
+        
+        <h3>4.1 Simple Table</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>City</th>
+                    <th>Occupation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Alice Johnson</td>
+                    <td>28</td>
+                    <td>New York</td>
+                    <td>Software Engineer</td>
+                </tr>
+                <tr>
+                    <td>Bob Smith</td>
+                    <td>34</td>
+                    <td>London</td>
+                    <td>Data Scientist</td>
+                </tr>
+                <tr>
+                    <td>Charlie Brown</td>
+                    <td>45</td>
+                    <td>Tokyo</td>
+                    <td>Product Manager</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>4.2 Complex Table with Colspan and Rowspan</h3>
+        <table>
+            <caption>Quarterly Sales Report</caption>
+            <thead>
+                <tr>
+                    <th rowspan="2">Region</th>
+                    <th colspan="3">Quarter 1</th>
+                    <th rowspan="2">Total</th>
+                </tr>
+                <tr>
+                    <th>Jan</th>
+                    <th>Feb</th>
+                    <th>Mar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>North</td>
+                    <td>$10,000</td>
+                    <td>$12,000</td>
+                    <td>$15,000</td>
+                    <td>$37,000</td>
+                </tr>
+                <tr>
+                    <td>South</td>
+                    <td>$8,000</td>
+                    <td>$9,500</td>
+                    <td>$11,000</td>
+                    <td>$28,500</td>
+                </tr>
+                <tr>
+                    <td>East</td>
+                    <td>$12,000</td>
+                    <td>$14,000</td>
+                    <td>$13,500</td>
+                    <td>$39,500</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <th>$30,000</th>
+                    <th>$35,500</th>
+                    <th>$39,500</th>
+                    <th>$105,000</th>
+                </tr>
+            </tfoot>
+        </table>
+    </section>
+
+    <hr>
+
+    <section id="code">
+        <h2>5. Code Blocks</h2>
+        
+        <h3>5.1 Inline Code</h3>
+        <p>Use the <code>print()</code> function to display output in Python.</p>
+        <p>In JavaScript, use <code>console.log()</code> for debugging.</p>
+
+        <h3>5.2 Preformatted Code Block</h3>
+        <pre><code>def calculate_fibonacci(n):
+    """
+    Calculate the nth Fibonacci number
+    Args:
+        n (int): Position in sequence
+    Returns:
+        int: Fibonacci number
+    """
+    if n <= 1:
+        return n
+    else:
+        return calculate_fibonacci(n-1) + calculate_fibonacci(n-2)
+
+# Test
+for i in range(10):
+    print(f"F({i}) = {calculate_fibonacci(i)}")</code></pre>
+
+        <h3>5.3 SQL Query Example</h3>
+        <pre><code>SELECT 
+    customers.name,
+    COUNT(orders.id) as total_orders,
+    SUM(orders.amount) as total_spent
+FROM customers
+LEFT JOIN orders ON customers.id = orders.customer_id
+WHERE orders.order_date >= '2024-01-01'
+GROUP BY customers.name
+HAVING total_orders > 5
+ORDER BY total_spent DESC
+LIMIT 10;</code></pre>
+    </section>
+
+    <hr>
+
+    <section id="media">
+        <h2>6. Media Elements</h2>
+        
+        <h3>6.1 Images</h3>
+        <figure>
+            <img src="https://via.placeholder.com/400x200" alt="Placeholder image" width="400" height="200">
+            <figcaption>Figure 1: This is a sample image with caption</figcaption>
+        </figure>
+
+        <h3>6.2 Links</h3>
+        <p>Visit <a href="https://www.google.com" target="_blank">Google</a> for search.</p>
+        <p>Internal link: <a href="#headings">Jump to Headings section</a></p>
+        <p>Email link: <a href="mailto:example@email.com">example@email.com</a></p>
+
+        <h3>6.3 Embedded Content</h3>
+        <p>Video and audio elements would go here (not included to keep file size small).</p>
+    </section>
+
+    <hr>
+
+    <section id="forms">
+        <h2>7. Form Elements</h2>
+        
+        <form action="#" method="post">
+            <fieldset>
+                <legend>User Information</legend>
+                
+                <div>
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                </div>
+                
+                <div>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                </div>
+                
+                <div>
+                    <label for="age">Age:</label>
+                    <input type="number" id="age" name="age" min="18" max="100">
+                </div>
+                
+                <div>
+                    <label for="country">Country:</label>
+                    <select id="country" name="country">
+                        <option value="">Select a country</option>
+                        <option value="us">United States</option>
+                        <option value="uk">United Kingdom</option>
+                        <option value="ca">Canada</option>
+                        <option value="au">Australia</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label>Gender:</label>
+                    <label><input type="radio" name="gender" value="male"> Male</label>
+                    <label><input type="radio" name="gender" value="female"> Female</label>
+                    <label><input type="radio" name="gender" value="other"> Other</label>
+                </div>
+                
+                <div>
+                    <label>Interests:</label>
+                    <label><input type="checkbox" name="interests" value="coding"> Coding</label>
+                    <label><input type="checkbox" name="interests" value="reading"> Reading</label>
+                    <label><input type="checkbox" name="interests" value="sports"> Sports</label>
+                </div>
+                
+                <div>
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" rows="4" cols="50" placeholder="Your message here..."></textarea>
+                </div>
+                
+                <div>
+                    <button type="submit">Submit</button>
+                    <button type="reset">Reset</button>
+                </div>
+            </fieldset>
+        </form>
+    </section>
+
+    <hr>
+
+    <section>
+        <h2>8. Semantic HTML5 Elements</h2>
+        
+        <article>
+            <header>
+                <h3>Article Title</h3>
+                <p><time datetime="2025-11-10">November 10, 2025</time></p>
+            </header>
+            <p>This is the article content. Articles are self-contained compositions that could be independently distributed.</p>
+            <footer>
+                <p>Article footer with additional information</p>
+            </footer>
+        </article>
+
+        <aside>
+            <h4>Sidebar Information</h4>
+            <p>This is sidebar content that provides supplementary information.</p>
+        </aside>
+
+        <details>
+            <summary>Click to expand details</summary>
+            <p>This content is hidden by default and can be toggled by clicking the summary.</p>
+        </details>
+    </section>
+
+    <hr>
+
+    <section>
+        <h2>9. Special Characters & Entities</h2>
+        <p>&lt; Less than</p>
+        <p>&gt; Greater than</p>
+        <p>&amp; Ampersand</p>
+        <p>&quot; Quote</p>
+        <p>&apos; Apostrophe</p>
+        <p>&copy; Copyright</p>
+        <p>&reg; Registered</p>
+        <p>&trade; Trademark</p>
+        <p>&euro; Euro</p>
+        <p>&pound; Pound</p>
+        <p>&yen; Yen</p>
+    </section>
+
+    <hr>
+
+    <footer class="footer">
+        <p><strong>Document Summary</strong></p>
+        <p>This comprehensive HTML document includes:</p>
+        <ul style="list-style: none; padding: 0;">
+            <li>✓ All heading levels (h1-h6)</li>
+            <li>✓ Text formatting (bold, italic, underline, strike, etc.)</li>
+            <li>✓ Lists (unordered, ordered, description)</li>
+            <li>✓ Tables (simple and complex with colspan/rowspan)</li>
+            <li>✓ Code blocks (inline and preformatted)</li>
+            <li>✓ Forms (inputs, select, radio, checkbox, textarea)</li>
+            <li>✓ Semantic HTML5 elements (article, aside, details)</li>
+            <li>✓ Special characters and entities</li>
+        </ul>
+        <p><em>Total: 9 sections covering 60+ HTML elements</em></p>
+        <hr>
+        <p>&copy; 2025 ConverterAI | Comprehensive Test Suite v1.0</p>
+    </footer>
+
+</body>
+</html>

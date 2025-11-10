@@ -1,0 +1,50 @@
+# Core Document Processing Libraries
+pypdf2==3.0.1
+PyMuPDF==1.23.8
+python-docx==1.1.0
+markdown==3.5.1
+markdown2==2.4.12  # Enhanced Markdown processing with extras
+mistune==3.0.2  # Fast Markdown parser
+beautifulsoup4==4.12.2
+html2text==2024.2.26  # Professional HTML to Markdown
+markdownify==0.11.6  # Alternative HTML to Markdown
+lxml==4.9.3
+
+# PDF Processing & OCR
+pdf2image==1.16.3
+pytesseract==0.3.10
+pdfplumber==0.10.3
+
+# Document Conversion
+pypandoc==1.12
+docx2pdf==0.1.8
+pdfkit==1.0.0
+weasyprint==60.1
+
+# AI and Machine Learning (All Optional)
+# openai==1.3.7  # Optional: Commercial API
+# anthropic==0.7.7  # Optional: Commercial API
+transformers==4.35.2  # Free: Local AI models
+torch==2.1.1  # Free: PyTorch for local AI
+sentence-transformers==2.2.2  # Free: Semantic similarity
+# ollama==0.1.6  # Optional: Local LLM (install separately)
+
+# Web Framework
+flask==3.0.0
+flask-cors==4.0.0
+werkzeug==3.0.1
+
+# Utilities
+pillow==10.1.0
+reportlab==4.0.7
+chardet==5.2.0
+python-magic-bin==0.4.14
+progressbar2==4.3.2
+
+# Security & Validation
+bleach==6.1.0
+python-dotenv==1.0.0
+
+# Testing
+pytest==7.4.3
+pytest-cov==4.1.0

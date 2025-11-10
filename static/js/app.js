@@ -1,0 +1,357 @@
+// ConverterAI Frontend Application
+
+const API_BASE = '';
+
+// State
+let state = {
+    fileId: null,
+    fileName: null,
+    fileFormat: null,
+    outputFormat: null,
+    taskId: null
+};
+
+// Format icons and labels
+const formatInfo = {
+    'pdf': { icon: 'fa-file-pdf', label: 'PDF', color: '#ef4444' },
+    'docx': { icon: 'fa-file-word', label: 'DOCX', color: '#2563eb' },
+    'markdown': { icon: 'fa-markdown', label: 'Markdown', color: '#6b7280' },
+    'html': { icon: 'fa-html5', label: 'HTML', color: '#f97316' }
+};
+
+// DOM Elements
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+const fileInfo = document.getElementById('fileInfo');
+const fileName = document.getElementById('fileName');
+const fileFormat = document.getElementById('fileFormat');
+const fileSize = document.getElementById('fileSize');
+const removeFileBtn = document.getElementById('removeFile');
+
+const conversionSection = document.getElementById('conversionSection');
+const formatButtons = document.getElementById('formatButtons');
+const qualityCheckbox = document.getElementById('qualityCheck');
+const convertBtn = document.getElementById('convertBtn');
+
+const progressSection = document.getElementById('progressSection');
+const progressFill = document.getElementById('progressFill');
+const progressText = document.getElementById('progressText');
+
+const resultSection = document.getElementById('resultSection');
+const processingTime = document.getElementById('processingTime');
+const qualityResult = document.getElementById('qualityResult');
+const qualityScore = document.getElementById('qualityScore');
+const warnings = document.getElementById('warnings');
+const warningsList = document.getElementById('warningsList');
+const downloadBtn = document.getElementById('downloadBtn');
+const newConversionBtn = document.getElementById('newConversionBtn');
+
+const errorSection = document.getElementById('errorSection');
+const errorMessage = document.getElementById('errorMessage');
+const retryBtn = document.getElementById('retryBtn');
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    loadSupportedConversions();
+    initEventListeners();
+});
+
+// Event Listeners
+function initEventListeners() {
+    // Drop zone
+    dropZone.addEventListener('click', () => fileInput.click());
+    dropZone.addEventListener('dragover', handleDragOver);
+    dropZone.addEventListener('dragleave', handleDragLeave);
+    dropZone.addEventListener('drop', handleDrop);
+    
+    // File input
+    fileInput.addEventListener('change', handleFileSelect);
+    
+    // Remove file
+    removeFileBtn.addEventListener('click', resetUpload);
+    
+    // Convert button
+    convertBtn.addEventListener('click', startConversion);
+    
+    // Download button
+    downloadBtn.addEventListener('click', downloadFile);
+    
+    // New conversion button
+    newConversionBtn.addEventListener('click', resetAll);
+    
+    // Retry button
+    retryBtn.addEventListener('click', resetAll);
+}
+
+// Drag and Drop Handlers
+function handleDragOver(e) {
+    e.preventDefault();
+    dropZone.classList.add('drag-over');
+}
+
+function handleDragLeave(e) {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+}
+
+function handleDrop(e) {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+        uploadFile(files[0]);
+    }
+}
+
+function handleFileSelect(e) {
+    const files = e.target.files;
+    if (files.length > 0) {
+        uploadFile(files[0]);
+    }
+}
+
+// File Upload
+async function uploadFile(file) {
+    showProgress('Dosya yükleniyor...', 20);
+    
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    try {
+        const response = await fetch(`${API_BASE}/api/upload`, {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            state.fileId = data.file_id;
+            state.fileName = data.original_name;
+            state.fileFormat = data.format;
+            
+            displayFileInfo(data);
+            hideProgress();
+            showConversionOptions(data.format);
+        } else {
+            showError(data.error || 'Dosya yüklenirken hata oluştu');
+        }
+    } catch (error) {
+        showError('Dosya yüklenirken hata oluştu: ' + error.message);
+    }
+}
+
+// Display File Info
+function displayFileInfo(data) {
+    fileName.textContent = data.original_name;
+    fileFormat.textContent = formatInfo[data.format]?.label || data.format.toUpperCase();
+    fileSize.textContent = data.size_mb + ' MB';
+    
+    document.querySelector('.drop-zone').style.display = 'none';
+    fileInfo.style.display = 'flex';
+}
+
+// Show Conversion Options
+async function showConversionOptions(inputFormat) {
+    conversionSection.style.display = 'block';
+    
+    try {
+        const response = await fetch(`${API_BASE}/api/supported-conversions`);
+        const data = await response.json();
+        
+        if (data.success) {
+            const supportedFormats = data.conversions[inputFormat] || [];
+            renderFormatButtons(supportedFormats);
+        }
+    } catch (error) {
+        console.error('Failed to load conversions:', error);
+    }
+}
+
+// Render Format Buttons
+function renderFormatButtons(formats) {
+    formatButtons.innerHTML = '';
+    
+    formats.forEach(format => {
+        const info = formatInfo[format];
+        if (!info) return;
+        
+        const button = document.createElement('button');
+        button.className = 'format-btn';
+        button.dataset.format = format;
+        button.innerHTML = `
+            <i class="fas ${info.icon}"></i>
+            <span>${info.label}</span>
+        `;
+        
+        button.addEventListener('click', () => selectFormat(format));
+        formatButtons.appendChild(button);
+    });
+}
+
+// Select Format
+function selectFormat(format) {
+    // Remove active class from all buttons
+    document.querySelectorAll('.format-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Add active class to selected button
+    const selectedBtn = document.querySelector(`[data-format="${format}"]`);
+    if (selectedBtn) {
+        selectedBtn.classList.add('active');
+        state.outputFormat = format;
+    }
+}
+
+// Start Conversion
+async function startConversion() {
+    if (!state.outputFormat) {
+        alert('Lütfen hedef format seçin');
+        return;
+    }
+    
+    const qualityCheck = qualityCheckbox.checked;
+    
+    showProgress('Dönüştürme başlatılıyor...', 30);
+    
+    try {
+        const response = await fetch(`${API_BASE}/api/convert`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                file_id: state.fileId,
+                output_format: state.outputFormat,
+                quality_check: qualityCheck
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            state.taskId = data.task_id;
+            showProgress('Dönüştürme tamamlandı!', 100);
+            
+            setTimeout(() => {
+                hideProgress();
+                showResult(data);
+            }, 500);
+        } else {
+            showError(data.error || 'Dönüştürme sırasında hata oluştu');
+        }
+    } catch (error) {
+        showError('Dönüştürme sırasında hata oluştu: ' + error.message);
+    }
+}
+
+// Show Result
+function showResult(data) {
+    conversionSection.style.display = 'none';
+    resultSection.style.display = 'block';
+    
+    processingTime.textContent = data.processing_time;
+    
+    // Quality score
+    if (data.quality_score !== null && data.quality_score !== undefined) {
+        qualityResult.style.display = 'flex';
+        const scorePercent = (data.quality_score * 100).toFixed(0);
+        qualityScore.textContent = scorePercent + '%';
+        
+        // Color code based on quality
+        const scoreElem = qualityScore.parentElement;
+        if (data.quality_score >= 0.9) {
+            scoreElem.style.color = '#10b981';
+        } else if (data.quality_score >= 0.7) {
+            scoreElem.style.color = '#f59e0b';
+        } else {
+            scoreElem.style.color = '#ef4444';
+        }
+    }
+    
+    // Warnings
+    if (data.warnings && data.warnings.length > 0) {
+        warnings.style.display = 'block';
+        warningsList.innerHTML = '';
+        data.warnings.forEach(warning => {
+            const li = document.createElement('li');
+            li.textContent = warning;
+            warningsList.appendChild(li);
+        });
+    }
+    
+    // Store output file for download
+    state.outputFile = data.output_file;
+}
+
+// Download File
+function downloadFile() {
+    if (state.outputFile) {
+        window.location.href = `${API_BASE}/api/download/${state.outputFile}`;
+    }
+}
+
+// Show Progress
+function showProgress(message, percent) {
+    conversionSection.style.display = 'none';
+    progressSection.style.display = 'block';
+    progressText.textContent = message;
+    progressFill.style.width = percent + '%';
+}
+
+// Hide Progress
+function hideProgress() {
+    progressSection.style.display = 'none';
+}
+
+// Show Error
+function showError(message) {
+    hideProgress();
+    conversionSection.style.display = 'none';
+    resultSection.style.display = 'none';
+    errorSection.style.display = 'block';
+    errorMessage.textContent = message;
+}
+
+// Reset Upload
+function resetUpload() {
+    document.querySelector('.drop-zone').style.display = 'block';
+    fileInfo.style.display = 'none';
+    conversionSection.style.display = 'none';
+    fileInput.value = '';
+    
+    state.fileId = null;
+    state.fileName = null;
+    state.fileFormat = null;
+    state.outputFormat = null;
+}
+
+// Reset All
+function resetAll() {
+    resetUpload();
+    hideProgress();
+    resultSection.style.display = 'none';
+    errorSection.style.display = 'none';
+    
+    state = {
+        fileId: null,
+        fileName: null,
+        fileFormat: null,
+        outputFormat: null,
+        taskId: null,
+        outputFile: null
+    };
+}
+
+// Load Supported Conversions
+async function loadSupportedConversions() {
+    try {
+        const response = await fetch(`${API_BASE}/api/supported-conversions`);
+        const data = await response.json();
+        console.log('Supported conversions:', data.conversions);
+    } catch (error) {
+        console.error('Failed to load supported conversions:', error);
+    }
+}
