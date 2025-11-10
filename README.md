@@ -36,7 +36,7 @@ ConverterAI, PDF, DOCX, Markdown ve HTML formatları arasında yapay zeka destek
 
 ### Adım 1: Repository'yi İndirin
 ```bash
-git clone https://github.com/yourusername/ConverterAI.git
+git clone https://github.com/HuseyınSoykok/ConverterAI.git
 cd ConverterAI
 ```
 
