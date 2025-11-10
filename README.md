@@ -237,7 +237,7 @@ Bu proje MIT lisansı altında lisanslanmıştır.
 
 ## 📧 İletişim
 
-Sorularınız için issue açabilir veya [email] adresinden ulaşabilirsiniz.
+Sorularınız için issue açabilir veya [https://huseyinsoykok.github.io/huseyin_soykok/] adresinden ulaşabilirsiniz.
 
 ## 🙏 Teşekkürler
 
