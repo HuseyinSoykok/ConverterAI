@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import time
 import uuid
+from datetime import datetime
 
 from converters import UniversalConverter
 from utils.file_handler import FileHandler
@@ -193,8 +194,18 @@ def convert_file():
                 'error': error
             }), 400
         
-        # Generate output filename
-        output_filename = f"{uuid.uuid4().hex}.{output_format}"
+        # Generate output filename with original name and timestamp
+        # Get original filename without extension
+        original_name = Path(input_file).stem
+        # Clean the UUID prefix if it exists
+        if '_' in original_name:
+            original_name = '_'.join(original_name.split('_')[1:])
+        
+        # Generate timestamp
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        
+        # Create meaningful filename: originalname_timestamp.format
+        output_filename = f"{original_name}_{timestamp}.{output_format}"
         if output_format == 'markdown':
             output_filename = output_filename.replace('.markdown', '.md')
         

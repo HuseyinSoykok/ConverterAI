@@ -79,6 +79,26 @@ class HTMLConverter(BaseConverter):
                 with open(input_file, 'r', encoding='utf-8') as f:
                     html_content = f.read()
                 
+                # Clean problematic HTML elements before parsing
+                import re
+                # Remove all problematic attributes from anchor tags
+                html_content = re.sub(r'<a[^>]*>', '', html_content)
+                html_content = re.sub(r'</a>', '', html_content)
+                # Remove id attributes that cause issues
+                html_content = re.sub(r'\sid=["\'][^"\']*["\']', '', html_content)
+                # Remove name attributes
+                html_content = re.sub(r'\sname=["\'][^"\']*["\']', '', html_content)
+                # Remove rel attributes (not supported by ReportLab)
+                html_content = re.sub(r'\srel=["\'][^"\']*["\']', '', html_content)
+                # Remove title attributes from links
+                html_content = re.sub(r'\stitle=["\'][^"\']*["\']', '', html_content)
+                # Remove class attributes (not supported by ReportLab)
+                html_content = re.sub(r'\sclass=["\'][^"\']*["\']', '', html_content)
+                # Remove target attributes
+                html_content = re.sub(r'\starget=["\'][^"\']*["\']', '', html_content)
+                # Remove alt attributes from img tags (can cause issues)
+                html_content = re.sub(r'\salt=["\'][^"\']*["\']', '', html_content)
+                
                 soup = BeautifulSoup(html_content, 'html.parser')
                 
                 # Create PDF with enhanced formatting
@@ -203,24 +223,29 @@ class HTMLConverter(BaseConverter):
                         if element.name == 'h1':
                             text = element.get_text().strip()
                             if text:
+                                # Clean problematic characters
+                                text = text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
                                 story.append(Paragraph(text, styles['CustomH1']))
                                 story.append(Spacer(1, 0.2 * inch))
                         
                         elif element.name == 'h2':
                             text = element.get_text().strip()
                             if text:
+                                text = text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
                                 story.append(Paragraph(text, styles['CustomH2']))
                                 story.append(Spacer(1, 0.15 * inch))
                         
                         elif element.name == 'h3':
                             text = element.get_text().strip()
                             if text:
+                                text = text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
                                 story.append(Paragraph(text, styles['CustomH3']))
                                 story.append(Spacer(1, 0.12 * inch))
                         
                         elif element.name in ['h4', 'h5', 'h6']:
                             text = element.get_text().strip()
                             if text:
+                                text = text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
                                 story.append(Paragraph(text, styles['CustomH4']))
                                 story.append(Spacer(1, 0.1 * inch))
                         
@@ -235,6 +260,8 @@ class HTMLConverter(BaseConverter):
                         elif element.name == 'blockquote':
                             quote_text = element.get_text().strip()
                             if quote_text:
+                                # Clean problematic characters
+                                quote_text = quote_text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
                                 story.append(Paragraph(quote_text, styles['BlockQuote']))
                         
                         # Lists
@@ -242,6 +269,8 @@ class HTMLConverter(BaseConverter):
                             for li in element.find_all('li', recursive=False):
                                 li_text = li.get_text().strip()
                                 if li_text:
+                                    # Clean problematic characters
+                                    li_text = li_text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
                                     if element.name == 'ul':
                                         bullet = '•'
                                     else:
@@ -259,12 +288,24 @@ class HTMLConverter(BaseConverter):
                             table_data = []
                             headers = element.find_all('th')
                             if headers:
-                                table_data.append([th.get_text().strip() for th in headers])
+                                # Clean problematic characters in headers
+                                clean_headers = []
+                                for th in headers:
+                                    text = th.get_text().strip()
+                                    text = text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+                                    clean_headers.append(text)
+                                table_data.append(clean_headers)
                             
                             for tr in element.find_all('tr'):
                                 tds = tr.find_all('td')
                                 if tds:
-                                    table_data.append([td.get_text().strip() for td in tds])
+                                    # Clean problematic characters in cells
+                                    clean_cells = []
+                                    for td in tds:
+                                        text = td.get_text().strip()
+                                        text = text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+                                        clean_cells.append(text)
+                                    table_data.append(clean_cells)
                             
                             if table_data:
                                 pdf_table = Table(table_data)
@@ -306,10 +347,30 @@ class HTMLConverter(BaseConverter):
                             para_html = para_html.replace('<sup>', '<super>').replace('</sup>', '</super>')
                             # <sub> is already supported by ReportLab
                             
+                            # Remove ALL anchor tags and their problematic attributes
+                            import re
+                            # Remove all anchor tags completely (they're already removed but check again)
+                            para_html = re.sub(r'<a[^>]*>', '', para_html)
+                            para_html = re.sub(r'</a>', '', para_html)
+                            # Remove img tags (ReportLab has issues with them)
+                            para_html = re.sub(r'<img[^>]*/?>', '[image]', para_html)
+                            # Remove br tags properly
+                            para_html = para_html.replace('<br/>', ' ').replace('<br>', ' ')
+                            # Remove any remaining problematic attributes
+                            para_html = re.sub(r'\s(id|name|class|rel|title|target)=["\'][^"\']*["\']', '', para_html)
+                            
                             text = para_html.strip()
                             if text and text not in ['', ' ']:
-                                story.append(Paragraph(text, styles['EnhancedBody']))
-                                story.append(Spacer(1, 0.05 * inch))
+                                try:
+                                    story.append(Paragraph(text, styles['EnhancedBody']))
+                                    story.append(Spacer(1, 0.05 * inch))
+                                except Exception as para_err:
+                                    # If paragraph fails, add as plain text
+                                    logger.warning(f"Paragraph rendering failed, using plain text: {para_err}")
+                                    plain_text = element.get_text().strip()
+                                    if plain_text:
+                                        story.append(Paragraph(plain_text, styles['EnhancedBody']))
+                                        story.append(Spacer(1, 0.05 * inch))
                     
                     except Exception as elem_e:
                         logger.warning(f"Error processing HTML element {element.name}: {elem_e}")

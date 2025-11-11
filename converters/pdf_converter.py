@@ -22,6 +22,17 @@ from utils.logger import logger
 class PDFConverter(BaseConverter):
     """Convert PDF to other formats"""
     
+    def _escape_html(self, text: str) -> str:
+        """Escape HTML special characters"""
+        if not text:
+            return ''
+        return (text
+                .replace('&', '&amp;')
+                .replace('<', '&lt;')
+                .replace('>', '&gt;')
+                .replace('"', '&quot;')
+                .replace("'", '&#39;'))
+    
     def convert(self, input_file: str, output_file: str, **options) -> ConversionResult:
         """Route to appropriate conversion method"""
         output_format = Path(output_file).suffix.lower().lstrip('.')
@@ -538,6 +549,17 @@ class PDFConverter(BaseConverter):
             '    margin: 16px 0;',
             '    text-align: justify;',
             '}',
+            'ul, ol {',
+            '    margin: 16px 0;',
+            '    padding-left: 32px;',
+            '}',
+            'li {',
+            '    margin: 8px 0;',
+            '    line-height: 1.6;',
+            '}',
+            'ul li {',
+            '    list-style-type: disc;',
+            '}',
             'table {',
             '    border-collapse: collapse;',
             '    width: 100%;',
@@ -608,25 +630,75 @@ class PDFConverter(BaseConverter):
                     html_parts.append(f'<div class="page">')
                     html_parts.append(f'<div class="page-number">Page {page_num} of {len(pdf.pages)}</div>')
                     
-                    # Extract text
+                    # Extract text with layout preservation
                     text = page.extract_text()
                     if text:
-                        # Process text into paragraphs
-                        paragraphs = text.split('\n\n')
-                        for para in paragraphs:
-                            para = para.strip()
-                            if para:
-                                # Simple heading detection
-                                if len(para) < 100 and para.isupper():
-                                    html_parts.append(f'<h2>{para.title()}</h2>')
-                                elif len(para) < 80 and para.endswith(':'):
-                                    html_parts.append(f'<h3>{para}</h3>')
-                                else:
-                                    # Regular paragraph - preserve line breaks within
-                                    para_html = para.replace('\n', ' ')
-                                    html_parts.append(f'<p>{para_html}</p>')
+                        # Split into lines for better processing
+                        lines = text.split('\n')
+                        current_paragraph = []
+                        in_list = False
+                        
+                        for line in lines:
+                            line = line.strip()
+                            if not line:
+                                # Empty line - end current paragraph
+                                if current_paragraph:
+                                    para_text = ' '.join(current_paragraph)
+                                    html_parts.append(f'<p>{self._escape_html(para_text)}</p>')
+                                    current_paragraph = []
+                                if in_list:
+                                    html_parts.append('</ul>')
+                                    in_list = False
+                                continue
+                            
+                            # Detect headings by font size and formatting
+                            # Check if line is all uppercase and short (likely heading)
+                            if len(line) < 100 and line.isupper() and not any(char.isdigit() for char in line[:3]):
+                                if current_paragraph:
+                                    para_text = ' '.join(current_paragraph)
+                                    html_parts.append(f'<p>{self._escape_html(para_text)}</p>')
+                                    current_paragraph = []
+                                html_parts.append(f'<h2>{self._escape_html(line.title())}</h2>')
+                            
+                            # Detect subheadings (lines ending with colon)
+                            elif len(line) < 80 and line.endswith(':') and not line.startswith(' '):
+                                if current_paragraph:
+                                    para_text = ' '.join(current_paragraph)
+                                    html_parts.append(f'<p>{self._escape_html(para_text)}</p>')
+                                    current_paragraph = []
+                                html_parts.append(f'<h3>{self._escape_html(line)}</h3>')
+                            
+                            # Detect bullet points or numbered lists
+                            elif line.startswith(('•', '-', '*', '▪', '◦', '▫', '■', '□')) or \
+                                 (len(line) > 2 and line[0].isdigit() and line[1] in '.):'):
+                                if current_paragraph:
+                                    para_text = ' '.join(current_paragraph)
+                                    html_parts.append(f'<p>{self._escape_html(para_text)}</p>')
+                                    current_paragraph = []
+                                if not in_list:
+                                    html_parts.append('<ul>')
+                                    in_list = True
+                                # Remove bullet/number prefix
+                                list_text = line.lstrip('•-*▪◦▫■□ ')
+                                if line[0].isdigit():
+                                    list_text = line.split('.', 1)[1].strip() if '.' in line else line
+                                html_parts.append(f'<li>{self._escape_html(list_text)}</li>')
+                            
+                            # Regular text line
+                            else:
+                                if in_list:
+                                    html_parts.append('</ul>')
+                                    in_list = False
+                                current_paragraph.append(line)
+                        
+                        # Close any remaining paragraph or list
+                        if current_paragraph:
+                            para_text = ' '.join(current_paragraph)
+                            html_parts.append(f'<p>{self._escape_html(para_text)}</p>')
+                        if in_list:
+                            html_parts.append('</ul>')
                     
-                    # Extract tables
+                    # Extract tables with better formatting
                     tables = page.extract_tables()
                     if tables:
                         for table in tables:
@@ -638,7 +710,12 @@ class PDFConverter(BaseConverter):
                                     tag = 'th' if row_idx == 0 else 'td'
                                     
                                     for cell in row:
-                                        cell_content = ' '.join(str(cell).split()) if cell else ''
+                                        if cell:
+                                            # Clean and escape cell content
+                                            cell_content = ' '.join(str(cell).split())
+                                            cell_content = self._escape_html(cell_content)
+                                        else:
+                                            cell_content = ''
                                         html_parts.append(f'<{tag}>{cell_content}</{tag}>')
                                     
                                     html_parts.append('</tr>')
