@@ -351,7 +351,7 @@ pre {
                     borderPadding=10,
                     spaceAfter=12,
                     spaceBefore=12,
-                    fontName='Helvetica-Oblique'
+                    fontName=default_font
                 ))
                 
                 # List item style
@@ -472,12 +472,12 @@ pre {
                                     ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#4a90e2')),
                                     ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
                                     ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-                                    ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                                    ('FONTNAME', (0, 0), (-1, 0), default_font_bold),
                                     ('FONTSIZE', (0, 0), (-1, 0), 11),
                                     ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
                                     ('BACKGROUND', (0, 1), (-1, -1), colors.white),
                                     ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
-                                    ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+                                    ('FONTNAME', (0, 1), (-1, -1), default_font),
                                     ('FONTSIZE', (0, 1), (-1, -1), 10),
                                     ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#dddddd')),
                                     ('VALIGN', (0, 0), (-1, -1), 'TOP'),
@@ -496,7 +496,7 @@ pre {
                             para_html = para_html.replace('<p>', '').replace('</p>', '')
                             para_html = para_html.replace('<strong>', '<b>').replace('</strong>', '</b>')
                             para_html = para_html.replace('<em>', '<i>').replace('</em>', '</i>')
-                            para_html = para_html.replace('<code>', '<font name="Courier" color="#c7254e" backColor="#f9f2f4">').replace('</code>', '</font>')
+                            para_html = para_html.replace('<code>', f'<font name="{default_font}" color="#c7254e" backColor="#f9f2f4">').replace('</code>', '</font>')
                             
                             # Strikethrough support (ReportLab uses <strike>)
                             para_html = para_html.replace('<del>', '<strike>').replace('</del>', '</strike>')
