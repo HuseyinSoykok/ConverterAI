@@ -203,6 +203,33 @@ pre {
                 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
                 from reportlab.lib.styles import getSampleStyleSheet
                 from reportlab.lib.units import inch
+                from reportlab.pdfbase import pdfmetrics
+                from reportlab.pdfbase.ttfonts import TTFont
+                
+                # Register Unicode-compatible fonts for Turkish characters
+                try:
+                    # Try to use DejaVu fonts (widely available and Unicode-complete)
+                    # These fonts support Turkish characters: ı, İ, ş, Ş, ğ, Ğ, ö, Ö, ü, Ü, ç, Ç
+                    pdfmetrics.registerFont(TTFont('DejaVu', 'DejaVuSans.ttf'))
+                    pdfmetrics.registerFont(TTFont('DejaVu-Bold', 'DejaVuSans-Bold.ttf'))
+                    pdfmetrics.registerFont(TTFont('DejaVu-Italic', 'DejaVuSans-Oblique.ttf'))
+                    pdfmetrics.registerFont(TTFont('DejaVu-BoldItalic', 'DejaVuSans-BoldOblique.ttf'))
+                    default_font = 'DejaVu'
+                    default_font_bold = 'DejaVu-Bold'
+                    logger.info("Using DejaVu fonts for Unicode support")
+                except:
+                    # Fallback: Try Arial (available on Windows)
+                    try:
+                        pdfmetrics.registerFont(TTFont('Arial-Unicode', 'arial.ttf'))
+                        pdfmetrics.registerFont(TTFont('Arial-Unicode-Bold', 'arialbd.ttf'))
+                        default_font = 'Arial-Unicode'
+                        default_font_bold = 'Arial-Unicode-Bold'
+                        logger.info("Using Arial fonts for Unicode support")
+                    except:
+                        # Last resort: Use Helvetica but warn about potential issues
+                        default_font = 'Helvetica'
+                        default_font_bold = 'Helvetica-Bold'
+                        logger.warning("Unicode fonts not available - Turkish characters may not display correctly")
                 
                 # Read HTML and extract text
                 with open(temp_html, 'r', encoding='utf-8') as f:
@@ -231,7 +258,7 @@ pre {
                     textColor=colors.HexColor('#1a1a1a'),
                     spaceAfter=16,
                     spaceBefore=12,
-                    fontName='Helvetica-Bold',
+                    fontName=default_font_bold,
                     leading=28
                 ))
                 
@@ -243,7 +270,7 @@ pre {
                     textColor=colors.HexColor('#2d2d2d'),
                     spaceAfter=14,
                     spaceBefore=10,
-                    fontName='Helvetica-Bold',
+                    fontName=default_font_bold,
                     leading=24
                 ))
                 
@@ -255,7 +282,7 @@ pre {
                     textColor=colors.HexColor('#404040'),
                     spaceAfter=12,
                     spaceBefore=8,
-                    fontName='Helvetica-Bold',
+                    fontName=default_font_bold,
                     leading=20
                 ))
                 
@@ -267,7 +294,7 @@ pre {
                     textColor=colors.HexColor('#555555'),
                     spaceAfter=10,
                     spaceBefore=6,
-                    fontName='Helvetica-Bold',
+                    fontName=default_font_bold,
                     leading=18
                 ))
                 
@@ -279,7 +306,7 @@ pre {
                     textColor=colors.HexColor('#666666'),
                     spaceAfter=8,
                     spaceBefore=6,
-                    fontName='Helvetica-Bold',
+                    fontName=default_font_bold,
                     leading=16
                 ))
                 
@@ -332,6 +359,7 @@ pre {
                     name='ListItem',
                     parent=styles['Normal'],
                     fontSize=11,
+                    fontName=default_font,
                     leftIndent=25,
                     spaceAfter=6,
                     bulletIndent=10
@@ -342,6 +370,7 @@ pre {
                     name='EnhancedBody',
                     parent=styles['Normal'],
                     fontSize=11,
+                    fontName=default_font,
                     textColor=colors.HexColor('#333333'),
                     spaceAfter=8,
                     leading=15,

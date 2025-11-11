@@ -81,6 +81,11 @@ class HTMLConverter(BaseConverter):
                 
                 # Clean problematic HTML elements before parsing
                 import re
+                
+                # CRITICAL: Remove <style> and <script> tags completely (they appear as text in PDF!)
+                html_content = re.sub(r'<style[^>]*>.*?</style>', '', html_content, flags=re.DOTALL | re.IGNORECASE)
+                html_content = re.sub(r'<script[^>]*>.*?</script>', '', html_content, flags=re.DOTALL | re.IGNORECASE)
+                
                 # Remove all problematic attributes from anchor tags
                 html_content = re.sub(r'<a[^>]*>', '', html_content)
                 html_content = re.sub(r'</a>', '', html_content)
@@ -100,6 +105,10 @@ class HTMLConverter(BaseConverter):
                 html_content = re.sub(r'\salt=["\'][^"\']*["\']', '', html_content)
                 
                 soup = BeautifulSoup(html_content, 'html.parser')
+                
+                # Double-check: Remove any remaining style and script tags from soup
+                for tag in soup(['style', 'script', 'meta', 'link']):
+                    tag.decompose()
                 
                 # Create PDF with enhanced formatting
                 doc = SimpleDocTemplate(
@@ -216,9 +225,92 @@ class HTMLConverter(BaseConverter):
                 
                 story = []
                 
+                # CSS/Style content indicators to skip
+                css_indicators = [
+                    'font-family:',
+                    'font-size:',
+                    'background:',
+                    'background-color:',
+                    'padding:',
+                    'margin:',
+                    'margin-top:',
+                    'margin-bottom:',
+                    'border:',
+                    'border-bottom:',
+                    'border-top:',
+                    'box-sizing:',
+                    'display:',
+                    'color:',
+                    'line-height:',
+                    'max-width:',
+                    'text-align:',
+                    'font-weight:',
+                    '/* ',
+                    '*/',
+                    '.table',
+                    '.text-',
+                    '.mb-',
+                    '.mt-',
+                    '@media',
+                    '{\\',  # CSS block start with backslash
+                    '}\\',  # CSS block end with backslash
+                    'rgba(',
+                    ' rem',
+                    'px;',
+                    '14px',
+                    '#fff',
+                    '#333',
+                    'serif;'
+                ]
+                
                 # Process HTML elements with proper formatting
                 for element in soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre', 'code', 'ul', 'ol', 'blockquote', 'hr', 'table']):
                     try:
+                        # Skip CSS/style content that shouldn't be in body
+                        element_text = element.get_text().strip()
+                        
+                        # Skip very short technical content (likely CSS fragments)
+                        if len(element_text) < 5 and ('{' in element_text or '}' in element_text or '\\' in element_text):
+                            continue
+                        
+                        # Skip multiline CSS blocks (ending with backslash)
+                        if element_text.endswith('\\') and (':' in element_text or '{' in element_text):
+                            continue
+                        
+                        # Skip CSS comments
+                        if element_text.startswith('/*') and element_text.endswith('*/'):
+                            continue
+                        if '/*' in element_text and '*/' in element_text:
+                            continue
+                        
+                        # Skip CSS selector blocks (e.g., "li { font-size: ... }")
+                        # Pattern: word/selector { property: value; }
+                        import re
+                        if re.search(r'[\w\-\.\#\>\:\s,]+\s*\{\s*[\w\-]+\s*:', element_text):
+                            continue  # This is a CSS rule
+                        
+                        # Skip if contains CSS property patterns
+                        if re.search(r'[\w\-]+\s*:\s*[\w\-]+\s*;', element_text) and '{' not in element_text:
+                            # Check if it's a real CSS property (not "Purpose: Test" or similar)
+                            lower = element_text.lower()
+                            if any(css_prop in lower for css_prop in ['font-', 'margin', 'padding', 'color:', 'background', 'border', 'width:', 'height:']):
+                                continue
+                        
+                        # Check if this element contains CSS/style code
+                        is_css_content = False
+                        if element.name == 'p' or element.name == 'ul':
+                            lower_text = element_text.lower()
+                            # If it contains multiple CSS indicators, likely style content
+                            css_matches = sum(1 for indicator in css_indicators if indicator.lower() in lower_text)
+                            if css_matches >= 3:  # At least 3 CSS indicators = likely CSS code
+                                is_css_content = True
+                            # Also check for single strong indicators
+                            elif any(ind in lower_text for ind in ['font-family:', 'background-color:', 'box-sizing:', '@media', 'font-feature-settings:', 'border-bottom-color:']):
+                                is_css_content = True
+                        
+                        if is_css_content:
+                            continue  # Skip this element
+                        
                         # Headings with hierarchy
                         if element.name == 'h1':
                             text = element.get_text().strip()
@@ -403,6 +495,10 @@ class HTMLConverter(BaseConverter):
             # Parse HTML
             soup = BeautifulSoup(html_content, 'html.parser')
             
+            # Remove style, script, meta, and link tags (they shouldn't appear in document content)
+            for tag in soup(['style', 'script', 'meta', 'link', 'noscript']):
+                tag.decompose()
+            
             # Create DOCX document
             doc = Document()
             
@@ -436,6 +532,16 @@ class HTMLConverter(BaseConverter):
             # Read HTML file with proper encoding
             with open(input_file, 'r', encoding='utf-8') as f:
                 html_content = f.read()
+            
+            # Parse with BeautifulSoup to clean first
+            soup = BeautifulSoup(html_content, 'html.parser')
+            
+            # Remove style, script, meta, and link tags
+            for tag in soup(['style', 'script', 'meta', 'link', 'noscript']):
+                tag.decompose()
+            
+            # Convert cleaned HTML back to string
+            html_content = str(soup)
             
             # Use markdownify for professional conversion
             # This is the Python equivalent of Breakdance used by ConvertAI
