@@ -56,12 +56,14 @@ SUPPORTED_CONVERSIONS = {
     'html': ['pdf', 'docx', 'markdown']
 }
 
-# Quality check thresholds
+# Quality check thresholds (adjusted for improved scoring system)
 QUALITY_THRESHOLDS = {
-    'excellent': 0.9,
-    'good': 0.7,
-    'acceptable': 0.5,
-    'poor': 0.3
+    'excellent': 0.90,      # 90%+ - Outstanding quality
+    'very_good': 0.80,      # 80-89% - Very good quality
+    'good': 0.70,           # 70-79% - Good quality
+    'acceptable': 0.60,     # 60-69% - Acceptable quality
+    'poor': 0.50            # 50-59% - Poor quality
+    # Below 50% = failed
 }
 
 # Logging

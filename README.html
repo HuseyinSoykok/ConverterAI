@@ -1,0 +1,741 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Converted Markdown</title>
+    <style>
+/* Professional Document Export Styles - Inspired by ConvertAI */
+/* Based on best practices from https://github.com/joemccann/ConvertAI */
+
+/* Reset & Base Typography */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 14px;
+  background: #fff;
+  color: #373D49;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: Georgia, Cambria, "Times New Roman", serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 2rem;  /* ConvertAI uses 2rem for better readability */
+  margin: 0;
+  padding: 2rem;
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+/* Paragraphs with proper spacing (ConvertAI-style) */
+p {
+  margin: 0 0 1.33999rem 0;
+  padding-top: 0.66001rem;
+  font-feature-settings: "kern" 1, "onum" 1, "liga" 1;  /* Typography features */
+}
+
+/* Lists with proper spacing */
+ul, ol {
+  margin-bottom: 0.83999rem;
+  padding-top: 0.16001rem;
+}
+
+li {
+  font-feature-settings: "kern" 1, "onum" 1, "liga" 1;
+  margin-left: 1rem;
+}
+
+li > ul, li > ol {
+  margin-bottom: 0;
+}
+
+/* Headings with ConvertAI typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Source Sans Pro", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-feature-settings: "dlig" 1, "liga" 1, "lnum" 1, "kern" 1;
+  font-weight: 600;
+  margin-top: 0;
+  line-height: 1.3;
+  color: #2c3e50;
+}
+
+h1 {
+  font-size: 2.0571428571rem;
+  line-height: 3rem;
+  margin-bottom: 0.21999rem;
+  padding-top: 0.78001rem;
+  border-bottom: 2px solid #e8e8e8;
+  padding-bottom: 0.3em;
+}
+
+h2 {
+  font-size: 1.953125rem;
+  line-height: 3rem;
+  margin-bottom: 0.18358375rem;
+  padding-top: 0.81641625rem;
+  border-bottom: 1px solid #e8e8e8;
+  padding-bottom: 0.3em;
+}
+
+h3 {
+  font-size: 1.6457142857rem;
+  line-height: 3rem;
+  margin-bottom: 0.07599rem;
+  padding-top: 0.92401rem;
+}
+
+h4 {
+  font-size: 1.5625rem;
+  margin-bottom: 0.546865rem;
+  padding-top: 0.453135rem;
+}
+
+h5 {
+  font-size: 1.25rem;
+  margin-bottom: -0.56251rem;
+  padding-top: 0.56251rem;
+}
+
+h6 {
+  font-size: 1rem;
+  margin-bottom: -0.65001rem;
+  padding-top: 0.65001rem;
+}
+
+h5 {
+  font-size: 1.125rem;
+}
+
+h6 {
+  font-size: 1rem;
+  color: #6c757d;
+}
+
+/* Paragraphs & Text */
+p {
+  margin: 0 0 1.25rem;
+}
+
+strong, b {
+  font-weight: 600;
+}
+
+em, i {
+  font-style: italic;
+}
+
+/* Links with ConvertAI styling */
+a {
+  color: #35D7BB;  /* ConvertAI's teal accent */
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a:hover, a:focus {
+  border-bottom-color: #35D7BB;
+  color: #2ac5a9;
+}
+
+/* Code Blocks - ConvertAI Style */
+code {
+  color: #c7254e;
+  background-color: #f9f2f4;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.9em;
+}
+
+pre {
+  display: block;
+  margin: 0 0 1.33999rem;
+  padding: 0.66001rem 9.5px 9.5px;
+  font-size: 1rem;
+  line-height: 2rem;
+  word-break: break-all;
+  word-wrap: break-word;
+  color: #333;
+  background: linear-gradient(
+    to bottom,
+    #fff 0, #fff 0.75rem,
+    #f5f7fa 0.75rem, #f5f7fa 2.75rem,
+    #fff 2.75rem, #fff 4rem
+  );
+  background-size: 100% 4rem;
+  border: 1px solid #d3daea;
+  border-radius: 4px;
+  overflow: auto;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+  white-space: pre-wrap;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+/* Blockquote - ConvertAI Style */
+blockquote {
+  margin: 0;
+  border-left: 3px solid #A0AABF;
+  padding: 0.66001rem 1rem 1rem;
+  font-style: italic;
+  color: #666;
+  background-color: #f9f9f9;
+}
+
+blockquote p {
+  margin-bottom: 0.33999rem;
+  padding-top: 0.66001rem;
+  font-size: 1rem;
+}
+
+/* Tables - ConvertAI/Bootstrap Style */
+table {
+  background-color: transparent;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+th {
+  text-align: left;
+}
+
+.table, table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
+}
+
+.table > thead > tr > th,
+table > thead > tr > th {
+  padding: 8px;
+  line-height: 1.428571429;
+  vertical-align: bottom;
+  border-top: 1px solid #ddd;
+  border-bottom: 2px solid #ddd;
+}
+
+.table > thead > tr > td,
+.table > tbody > tr > th,
+.table > tbody > tr > td,
+.table > tfoot > tr > th,
+.table > tfoot > tr > td,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td,
+table > tfoot > tr > th,
+table > tfoot > tr > td {
+  padding: 8px;
+  line-height: 1.428571429;
+  vertical-align: top;
+  border-top: 1px solid #ddd;
+}
+
+/* Bootstrap table-bordered */
+.table-bordered,
+.table-bordered > thead > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > th,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > th,
+.table-bordered > tfoot > tr > td {
+  border: 1px solid #ddd;
+}
+
+.table-bordered > thead > tr > th,
+.table-bordered > thead > tr > td {
+  border-bottom-width: 2px;
+}
+
+/* Bootstrap table-striped */
+.table-striped > tbody > tr:nth-child(odd) > td,
+.table-striped > tbody > tr:nth-child(odd) > th {
+  background-color: #f9f9f9;
+}
+
+/* Table hover effect */
+.table-hover > tbody > tr:hover > td,
+.table-hover > tbody > tr:hover > th {
+  background-color: #f5f5f5;
+}
+
+/* Horizontal Rule */
+hr {
+  border: none;
+  border-top: 2px solid #e0e0e0;
+  margin: 32px 0;
+}
+
+/* Images */
+img {
+  max-width: 100%;
+  height: auto;
+  margin: 20px 0;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+blockquote p {
+  margin-bottom: 0.5rem;
+}
+
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* Tables - Professional Styling */
+table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 1.25rem;
+  background-color: transparent;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+table th,
+table td {
+  padding: 0.75rem;
+  vertical-align: top;
+  border: 1px solid #d0d7de;
+  text-align: left;
+  line-height: 1.5;
+}
+
+table thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #d0d7de;
+  background-color: #f6f8fa;
+  font-weight: 600;
+  color: #24292f;
+}
+
+table tbody tr:nth-child(odd) {
+  background-color: #f6f8fa;
+}
+
+table tbody tr:hover {
+  background-color: #f0f3f5;
+}
+
+/* Striped Tables */
+.table-striped tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+/* Bordered Tables */
+.table-bordered,
+.table-bordered th,
+.table-bordered td {
+  border: 1px solid #d0d7de;
+}
+
+.table-bordered thead th,
+.table-bordered thead td {
+  border-bottom-width: 2px;
+}
+
+/* Horizontal Rules */
+hr {
+  height: 0.25rem;
+  padding: 0;
+  margin: 1.5rem 0;
+  background-color: #e8e8e8;
+  border: 0;
+}
+
+/* Images */
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: 1rem 0;
+}
+
+/* Task Lists */
+input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+/* Keyboard Keys */
+kbd {
+  display: inline-block;
+  padding: 0.1875rem 0.375rem;
+  font-size: 0.875em;
+  font-family: "Consolas", "Monaco", "Courier New", monospace;
+  color: #24292f;
+  background-color: #f6f8fa;
+  border: 1px solid #d0d7de;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 rgba(175, 184, 193, 0.2);
+}
+
+/* Responsive Tables */
+@media screen and (max-width: 768px) {
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  body {
+    padding: 1rem;
+  }
+  
+  h1 {
+    font-size: 1.75rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  h3 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Print Styles */
+@media print {
+  body {
+    font-size: 12pt;
+    color: #000;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  
+  pre, blockquote, table, img {
+    page-break-inside: avoid;
+  }
+  
+  a {
+    color: #000;
+    text-decoration: underline;
+  }
+  
+  thead {
+    display: table-header-group;
+  }
+}
+
+/* Utility Classes */
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+
+    </style>
+</head>
+<body>
+<h1 id="converterai">ConverterAI 🚀</h1>
+
+<p><strong>AI Destekli Profesyonel Doküman Dönüşüm Sistemi</strong></p>
+
+<p>ConverterAI, PDF, DOCX, Markdown ve HTML formatları arasında yapay zeka destekli, yüksek kaliteli dönüşümler sağlayan, tamamen local çalışan bir doküman dönüşüm platformudur.</p>
+
+<h2 id="ozellikler">✨ Özellikler</h2>
+
+<h3 id="desteklenen-donusumler">Desteklenen Dönüşümler</h3>
+
+<ul>
+<li>📄 <strong>PDF</strong> ↔️ DOCX / Markdown / HTML</li>
+<li>📝 <strong>DOCX</strong> ↔️ PDF / Markdown / HTML</li>
+<li>📋 <strong>Markdown</strong> ↔️ PDF / DOCX / HTML</li>
+<li>🌐 <strong>HTML</strong> ↔️ PDF / DOCX / Markdown</li>
+</ul>
+
+<h3 id="temel-ozellikler">Temel Özellikler</h3>
+
+<ul>
+<li>✅ <strong>AI Destekli Kalite Kontrol</strong> - Dönüşüm kalitesini otomatik değerlendirme
+<ul>
+<li>🆓 <strong>Heuristic</strong>: Sezgisel analiz (her zaman kullanılabilir)</li>
+<li>🆓 <strong>Transformers</strong>: Semantic AI analizi (ücretsiz, önerilen)</li>
+<li>🆓 <strong>Ollama</strong>: Local LLM ile GPT kalitesinde analiz (ücretsiz)</li>
+<li>💰 OpenAI/Anthropic: Ücretli API&#8217;lar (opsiyonel)</li>
+</ul></li>
+<li>🔒 <strong>100% Local</strong> - Dosyalarınız bilgisayarınızdan çıkmaz</li>
+<li>🎨 <strong>Format Koruma</strong> - Başlıklar, tablolar, görseller korunur</li>
+<li>📊 <strong>OCR Desteği</strong> - Taranmış PDF&#8217;lerden metin çıkarımı</li>
+<li>📦 <strong>Toplu İşleme</strong> - Birden fazla dosyayı aynı anda dönüştürme</li>
+<li>📈 <strong>İlerleme Takibi</strong> - Real-time dönüşüm durumu</li>
+<li>💾 <strong>Export As</strong> - Dönüştürülen dosyaları indirme</li>
+<li>🎯 <strong>Kullanıcı Dostu Arayüz</strong> - Modern ve responsive tasarım</li>
+</ul>
+
+<h2 id="kurulum">🛠️ Kurulum</h2>
+
+<h3 id="gereksinimler">Gereksinimler</h3>
+
+<ul>
+<li>Python 3.8 veya üzeri</li>
+<li>pip (Python paket yöneticisi)</li>
+<li>2 GB RAM (önerilen)</li>
+<li>100 MB boş disk alanı</li>
+</ul>
+
+<h3 id="adım-1-repositoryyi-indirin">Adım 1: Repository&#8217;yi İndirin</h3>
+
+<pre><code>git clone https://github.com/HuseyınSoykok/ConverterAI.git
+cd ConverterAI
+</code></pre>
+
+<h3 id="adım-2-sanal-ortam-olusturun">Adım 2: Sanal Ortam Oluşturun</h3>
+
+<pre><code>python -m venv venv
+# Windows
+venv\Scripts\activate
+# Linux/Mac
+source venv/bin/activate
+</code></pre>
+
+<h3 id="adım-3-bagımlılıkları-yukleyin">Adım 3: Bağımlılıkları Yükleyin</h3>
+
+<pre><code>pip install -r requirements.txt
+</code></pre>
+
+<h3 id="adım-4-yapılandırma">Adım 4: Yapılandırma</h3>
+
+<pre><code># .env dosyasını oluşturun
+copy .env.example .env
+# .env dosyasını düzenleyin (isteğe bağlı)
+</code></pre>
+
+<h3 id="adım-5-ek-araclar-windows-icin">Adım 5: Ek Araçlar (Windows için)</h3>
+
+<ul>
+<li><p><strong>Tesseract OCR</strong> (taranmış PDF&#8217;ler için):</p>
+
+<ul>
+<li>İndirin: https://github.com/UB-Mannheim/tesseract/wiki</li>
+<li>PATH&#8217;e ekleyin</li>
+</ul></li>
+<li><p><strong>wkhtmltopdf</strong> (HTML to PDF için):</p>
+
+<ul>
+<li>İndirin: https://wkhtmltopdf.org/downloads.html</li>
+<li>PATH&#8217;e ekleyin</li>
+</ul></li>
+</ul>
+
+<h2 id="kullanım">🚀 Kullanım</h2>
+
+<h3 id="web-arayuzu-ile-kullanım">Web Arayüzü ile Kullanım</h3>
+
+<pre><code>python app.py
+</code></pre>
+
+<p>Tarayıcınızda <code>http://localhost:5000</code> adresini açın.</p>
+
+<h3 id="komut-satırı-ile-kullanım">Komut Satırı ile Kullanım</h3>
+
+<pre><code># Tek dosya dönüşümü
+python cli.py convert input.pdf --to docx --output output.docx
+
+# Toplu dönüşüm
+python cli.py batch --input-folder ./docs --format markdown --output-folder ./converted
+
+# Kalite kontrolü
+python cli.py convert input.pdf --to html --quality-check
+</code></pre>
+
+<h2 id="api-kullanımı">📚 API Kullanımı</h2>
+
+<pre><code>from converters import UniversalConverter
+
+# Converter oluştur
+converter = UniversalConverter()
+
+# PDF'i DOCX'e dönüştür
+result = converter.convert(
+    input_file="document.pdf",
+    output_format="docx",
+    output_file="output.docx",
+    quality_check=True
+)
+
+if result.success:
+    print(f"Dönüşüm başarılı! Kalite skoru: {result.quality_score}")
+else:
+    print(f"Hata: {result.error}")
+</code></pre>
+
+<h2 id="proje-yapısı">🏗️ Proje Yapısı</h2>
+
+<pre><code>ConverterAI/
+├── app.py                      # Flask web uygulaması
+├── cli.py                      # Komut satırı arayüzü
+├── config.py                   # Yapılandırma ayarları
+├── requirements.txt            # Python bağımlılıkları
+├── README.md                   # Dokümantasyon
+│
+├── converters/                 # Dönüşüm motorları
+│   ├── __init__.py
+│   ├── base.py                # Temel converter sınıfı
+│   ├── pdf_converter.py       # PDF dönüşümleri
+│   ├── docx_converter.py      # DOCX dönüşümleri
+│   ├── markdown_converter.py  # Markdown dönüşümleri
+│   ├── html_converter.py      # HTML dönüşümleri
+│   └── universal.py           # Merkezi converter
+│
+├── ai/                         # AI modülleri
+│   ├── __init__.py
+│   ├── quality_checker.py     # Kalite değerlendirme
+│   └── ocr_engine.py          # OCR motoru
+│
+├── utils/                      # Yardımcı fonksiyonlar
+│   ├── __init__.py
+│   ├── file_handler.py        # Dosya işlemleri
+│   ├── validator.py           # Doğrulama
+│   └── logger.py              # Loglama
+│
+├── static/                     # Frontend dosyaları
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   │   └── app.js
+│   └── images/
+│
+├── templates/                  # HTML şablonları
+│   └── index.html
+│
+└── tests/                      # Test dosyaları
+    ├── test_converters.py
+    └── test_quality.py
+</code></pre>
+
+<h2 id="kullanım-ornekleri">🎯 Kullanım Örnekleri</h2>
+
+<h3 id="web-arayuzu">Web Arayüzü</h3>
+
+<ol>
+<li>Dosyayı sürükle-bırak veya seç</li>
+<li>Hedef formatı seç</li>
+<li>&#8220;Dönüştür&#8221; butonuna tıkla</li>
+<li>Önizleme yap</li>
+<li>&#8220;İndir&#8221; ile dosyayı kaydet</li>
+</ol>
+
+<h3 id="python-api">Python API</h3>
+
+<pre><code># Örnek 1: Markdown'dan PDF
+converter.convert("README.md", "pdf", "README.pdf")
+
+# Örnek 2: HTML'den DOCX (AI kalite kontrolü ile)
+result = converter.convert(
+    "webpage.html", 
+    "docx", 
+    "document.docx",
+    quality_check=True,
+    preserve_images=True
+)
+
+# Örnek 3: Toplu dönüşüm
+converter.batch_convert(
+    input_files=["doc1.pdf", "doc2.pdf"],
+    output_format="markdown",
+    output_dir="./converted"
+)
+</code></pre>
+
+<h2 id="yapılandırma">🔧 Yapılandırma</h2>
+
+<p><code>.env</code> dosyasında şu ayarları yapabilirsiniz:</p>
+
+<ul>
+<li><code>MAX_FILE_SIZE_MB</code>: Maksimum dosya boyutu (varsayılan: 50 MB)</li>
+<li><code>DEFAULT_DPI</code>: PDF çözünürlüğü (varsayılan: 300)</li>
+<li><code>OCR_LANGUAGE</code>: OCR dili (varsayılan: tur+eng)</li>
+<li><code>ENABLE_AI_QUALITY_CHECK</code>: AI kalite kontrolü (varsayılan: True)</li>
+<li><code>AI_QUALITY_METHOD</code>: Kalite kontrol yöntemi
+<ul>
+<li><code>heuristic</code> - Sezgisel (varsayılan, her zaman kullanılabilir)</li>
+<li><code>transformers</code> - HuggingFace AI (ücretsiz, önerilen) 🌟</li>
+<li><code>ollama</code> - Local LLM (ücretsiz, GPT benzeri)</li>
+<li><code>openai</code> - OpenAI API (ücretli, opsiyonel)</li>
+<li><code>anthropic</code> - Anthropic API (ücretli, opsiyonel)</li>
+</ul></li>
+</ul>
+
+<h3 id="ucretsiz-ai-kalite-kontrolu">🆓 Ücretsiz AI Kalite Kontrolü</h3>
+
+<p><strong>Hiçbir API key&#8217;e ihtiyacınız yok!</strong> Detaylı bilgi için: <a rel="noopener" target="_blank" href="FREE_AI_GUIDE.md">FREE_AI_GUIDE.md</a></p>
+
+<pre><code># .env dosyası
+AI_QUALITY_METHOD=transformers  # Ücretsiz, güçlü, önerilen!
+</code></pre>
+
+<h2 id="test">🧪 Test</h2>
+
+<pre><code># Tüm testleri çalıştır
+pytest
+
+# Coverage raporu
+pytest --cov=converters --cov-report=html
+</code></pre>
+
+<h2 id="katkıda-bulunma">🤝 Katkıda Bulunma</h2>
+
+<p>Katkılarınızı bekliyoruz! Lütfen:</p>
+
+<ol>
+<li>Fork yapın</li>
+<li>Feature branch oluşturun (<code>git checkout -b feature/amazing-feature</code>)</li>
+<li>Commit edin (<code>git commit -m 'Add amazing feature'</code>)</li>
+<li>Push edin (<code>git push origin feature/amazing-feature</code>)</li>
+<li>Pull Request açın</li>
+</ol>
+
+<h2 id="lisans">📝 Lisans</h2>
+
+<p>Bu proje MIT lisansı altında lisanslanmıştır.</p>
+
+<h2 id="iletisim">📧 İletişim</h2>
+
+<p>Sorularınız için issue açabilir veya [https://huseyinsoykok.github.io/huseyin_soykok/] adresinden ulaşabilirsiniz.</p>
+
+<h2 id="tesekkurler">🙏 Teşekkürler</h2>
+
+<p>Bu proje şu açık kaynak kütüphaneleri kullanmaktadır:</p>
+
+<ul>
+<li>PyMuPDF, python-docx, BeautifulSoup4, WeasyPrint ve daha fazlası</li>
+<li>HuggingFace Transformers (ücretsiz AI)</li>
+<li>Ollama (ücretsiz local LLM)</li>
+</ul>
+
+<hr />
+
+<p><strong>Not</strong>:</p>
+
+<ul>
+<li>🆓 <strong>AI kalite kontrolü tamamen ücretsiz!</strong> API key gerekmez.</li>
+<li>💡 Transformers yöntemi önerilir (ücretsiz ve güçlü).</li>
+<li>📖 Detaylar için: <a rel="noopener" target="_blank" href="FREE_AI_GUIDE.md">FREE_AI_GUIDE.md</a></li>
+</ul>
+
+</body>
+</html>

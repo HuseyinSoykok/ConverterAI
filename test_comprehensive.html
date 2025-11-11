@@ -1,250 +1,1176 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Comprehensive HTML test document for ConverterAI">
-    <title>Comprehensive HTML Test Document</title>
+    <title>Converted Markdown</title>
     <style>
-        body {
-            font-family: Georgia, 'Times New Roman', serif;
-            line-height: 1.8;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            color: #333;
-        }
-        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
-        h2 { color: #34495e; border-bottom: 2px solid #95a5a6; padding-bottom: 8px; }
-        h3 { color: #7f8c8d; }
-        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
-        th, td { border: 1px solid #bdc3c7; padding: 12px; text-align: left; }
-        th { background-color: #3498db; color: white; font-weight: 600; }
-        tr:nth-child(even) { background-color: #ecf0f1; }
-        code { background-color: #f8f9fa; padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', monospace; }
-        pre { background-color: #2c3e50; color: #ecf0f1; padding: 15px; border-radius: 5px; overflow-x: auto; }
-        blockquote { border-left: 4px solid #3498db; margin: 20px 0; padding: 10px 20px; background-color: #ecf0f1; font-style: italic; }
-        .highlight { background-color: #f39c12; padding: 2px 4px; }
-        .footer { margin-top: 40px; padding-top: 20px; border-top: 2px solid #95a5a6; text-align: center; color: #7f8c8d; }
+/* Professional Document Export Styles - Inspired by ConvertAI */
+/* Based on best practices from https://github.com/joemccann/ConvertAI */
+
+/* Reset & Base Typography */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 14px;
+  background: #fff;
+  color: #373D49;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: Georgia, Cambria, "Times New Roman", serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 2rem;  /* ConvertAI uses 2rem for better readability */
+  margin: 0;
+  padding: 2rem;
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+/* Paragraphs with proper spacing (ConvertAI-style) */
+p {
+  margin: 0 0 1.33999rem 0;
+  padding-top: 0.66001rem;
+  font-feature-settings: "kern" 1, "onum" 1, "liga" 1;  /* Typography features */
+}
+
+/* Lists with proper spacing */
+ul, ol {
+  margin-bottom: 0.83999rem;
+  padding-top: 0.16001rem;
+}
+
+li {
+  font-feature-settings: "kern" 1, "onum" 1, "liga" 1;
+  margin-left: 1rem;
+}
+
+li > ul, li > ol {
+  margin-bottom: 0;
+}
+
+/* Headings with ConvertAI typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Source Sans Pro", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-feature-settings: "dlig" 1, "liga" 1, "lnum" 1, "kern" 1;
+  font-weight: 600;
+  margin-top: 0;
+  line-height: 1.3;
+  color: #2c3e50;
+}
+
+h1 {
+  font-size: 2.0571428571rem;
+  line-height: 3rem;
+  margin-bottom: 0.21999rem;
+  padding-top: 0.78001rem;
+  border-bottom: 2px solid #e8e8e8;
+  padding-bottom: 0.3em;
+}
+
+h2 {
+  font-size: 1.953125rem;
+  line-height: 3rem;
+  margin-bottom: 0.18358375rem;
+  padding-top: 0.81641625rem;
+  border-bottom: 1px solid #e8e8e8;
+  padding-bottom: 0.3em;
+}
+
+h3 {
+  font-size: 1.6457142857rem;
+  line-height: 3rem;
+  margin-bottom: 0.07599rem;
+  padding-top: 0.92401rem;
+}
+
+h4 {
+  font-size: 1.5625rem;
+  margin-bottom: 0.546865rem;
+  padding-top: 0.453135rem;
+}
+
+h5 {
+  font-size: 1.25rem;
+  margin-bottom: -0.56251rem;
+  padding-top: 0.56251rem;
+}
+
+h6 {
+  font-size: 1rem;
+  margin-bottom: -0.65001rem;
+  padding-top: 0.65001rem;
+}
+
+h5 {
+  font-size: 1.125rem;
+}
+
+h6 {
+  font-size: 1rem;
+  color: #6c757d;
+}
+
+/* Paragraphs & Text */
+p {
+  margin: 0 0 1.25rem;
+}
+
+strong, b {
+  font-weight: 600;
+}
+
+em, i {
+  font-style: italic;
+}
+
+/* Links with ConvertAI styling */
+a {
+  color: #35D7BB;  /* ConvertAI's teal accent */
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a:hover, a:focus {
+  border-bottom-color: #35D7BB;
+  color: #2ac5a9;
+}
+
+/* Code Blocks - ConvertAI Style */
+code {
+  color: #c7254e;
+  background-color: #f9f2f4;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.9em;
+}
+
+pre {
+  display: block;
+  margin: 0 0 1.33999rem;
+  padding: 0.66001rem 9.5px 9.5px;
+  font-size: 1rem;
+  line-height: 2rem;
+  word-break: break-all;
+  word-wrap: break-word;
+  color: #333;
+  background: linear-gradient(
+    to bottom,
+    #fff 0, #fff 0.75rem,
+    #f5f7fa 0.75rem, #f5f7fa 2.75rem,
+    #fff 2.75rem, #fff 4rem
+  );
+  background-size: 100% 4rem;
+  border: 1px solid #d3daea;
+  border-radius: 4px;
+  overflow: auto;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+  white-space: pre-wrap;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+/* Blockquote - ConvertAI Style */
+blockquote {
+  margin: 0;
+  border-left: 3px solid #A0AABF;
+  padding: 0.66001rem 1rem 1rem;
+  font-style: italic;
+  color: #666;
+  background-color: #f9f9f9;
+}
+
+blockquote p {
+  margin-bottom: 0.33999rem;
+  padding-top: 0.66001rem;
+  font-size: 1rem;
+}
+
+/* Tables - ConvertAI/Bootstrap Style */
+table {
+  background-color: transparent;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+th {
+  text-align: left;
+}
+
+.table, table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
+}
+
+.table > thead > tr > th,
+table > thead > tr > th {
+  padding: 8px;
+  line-height: 1.428571429;
+  vertical-align: bottom;
+  border-top: 1px solid #ddd;
+  border-bottom: 2px solid #ddd;
+}
+
+.table > thead > tr > td,
+.table > tbody > tr > th,
+.table > tbody > tr > td,
+.table > tfoot > tr > th,
+.table > tfoot > tr > td,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td,
+table > tfoot > tr > th,
+table > tfoot > tr > td {
+  padding: 8px;
+  line-height: 1.428571429;
+  vertical-align: top;
+  border-top: 1px solid #ddd;
+}
+
+/* Bootstrap table-bordered */
+.table-bordered,
+.table-bordered > thead > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > th,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > th,
+.table-bordered > tfoot > tr > td {
+  border: 1px solid #ddd;
+}
+
+.table-bordered > thead > tr > th,
+.table-bordered > thead > tr > td {
+  border-bottom-width: 2px;
+}
+
+/* Bootstrap table-striped */
+.table-striped > tbody > tr:nth-child(odd) > td,
+.table-striped > tbody > tr:nth-child(odd) > th {
+  background-color: #f9f9f9;
+}
+
+/* Table hover effect */
+.table-hover > tbody > tr:hover > td,
+.table-hover > tbody > tr:hover > th {
+  background-color: #f5f5f5;
+}
+
+/* Horizontal Rule */
+hr {
+  border: none;
+  border-top: 2px solid #e0e0e0;
+  margin: 32px 0;
+}
+
+/* Images */
+img {
+  max-width: 100%;
+  height: auto;
+  margin: 20px 0;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+blockquote p {
+  margin-bottom: 0.5rem;
+}
+
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* Tables - Professional Styling */
+table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 1.25rem;
+  background-color: transparent;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+table th,
+table td {
+  padding: 0.75rem;
+  vertical-align: top;
+  border: 1px solid #d0d7de;
+  text-align: left;
+  line-height: 1.5;
+}
+
+table thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #d0d7de;
+  background-color: #f6f8fa;
+  font-weight: 600;
+  color: #24292f;
+}
+
+table tbody tr:nth-child(odd) {
+  background-color: #f6f8fa;
+}
+
+table tbody tr:hover {
+  background-color: #f0f3f5;
+}
+
+/* Striped Tables */
+.table-striped tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+/* Bordered Tables */
+.table-bordered,
+.table-bordered th,
+.table-bordered td {
+  border: 1px solid #d0d7de;
+}
+
+.table-bordered thead th,
+.table-bordered thead td {
+  border-bottom-width: 2px;
+}
+
+/* Horizontal Rules */
+hr {
+  height: 0.25rem;
+  padding: 0;
+  margin: 1.5rem 0;
+  background-color: #e8e8e8;
+  border: 0;
+}
+
+/* Images */
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: 1rem 0;
+}
+
+/* Task Lists */
+input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+/* Keyboard Keys */
+kbd {
+  display: inline-block;
+  padding: 0.1875rem 0.375rem;
+  font-size: 0.875em;
+  font-family: "Consolas", "Monaco", "Courier New", monospace;
+  color: #24292f;
+  background-color: #f6f8fa;
+  border: 1px solid #d0d7de;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 rgba(175, 184, 193, 0.2);
+}
+
+/* Responsive Tables */
+@media screen and (max-width: 768px) {
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  body {
+    padding: 1rem;
+  }
+  
+  h1 {
+    font-size: 1.75rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  h3 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Print Styles */
+@media print {
+  body {
+    font-size: 12pt;
+    color: #000;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  
+  pre, blockquote, table, img {
+    page-break-inside: avoid;
+  }
+  
+  a {
+    color: #000;
+    text-decoration: underline;
+  }
+  
+  thead {
+    display: table-header-group;
+  }
+}
+
+/* Utility Classes */
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+
     </style>
 </head>
 <body>
+<p>﻿﻿</p>
 
-    <header>
-        <h1>Comprehensive HTML Test Document</h1>
-        <p><strong>Purpose:</strong> Test all HTML elements for conversion quality</p>
-        <p><em>Created:</em> November 10, 2025 | <em>Version:</em> 1.0</p>
-    </header>
+<p>Converted Markdown</p>
 
-    <hr>
+<p>/* Professional Document Export Styles - Inspired by ConvertAI <em>/<br />
+/</em> Based on best practices from https://github.com/joemccann/ConvertAI */</p>
 
-    <nav>
-        <h2>Table of Contents</h2>
-        <ul>
-            <li><a href="#headings">Headings</a></li>
-            <li><a href="#text">Text Formatting</a></li>
-            <li><a href="#lists">Lists</a></li>
-            <li><a href="#tables">Tables</a></li>
-            <li><a href="#code">Code Blocks</a></li>
-            <li><a href="#media">Media Elements</a></li>
-            <li><a href="#forms">Forms</a></li>
-        </ul>
-    </nav>
+<p>/* Reset &amp; Base Typography */</p>
 
-    <hr>
+<ul>
+<li>{<br />
+box-sizing: border-box;<br />
+}</li>
+</ul>
 
-    <section id="headings">
-        <h2>1. Heading Hierarchy</h2>
-        <h1>Heading Level 1</h1>
-        <h2>Heading Level 2</h2>
-        <h3>Heading Level 3</h3>
-        <h4>Heading Level 4</h4>
-        <h5>Heading Level 5</h5>
-        <h6>Heading Level 6</h6>
-    </section>
+<p>html {<br />
+ font-size: 14px;<br />
+ background: #fff;<br />
+ color: #373D49;<br />
+ -webkit-text-size-adjust: 100%;<br />
+}</p>
 
-    <hr>
+<p>body {<br />
+ font-family: Georgia, Cambria, &#8220;Times New Roman&#8221;, serif;<br />
+ font-size: 1rem;<br />
+ font-weight: 400;<br />
+ line-height: 2rem; /* ConvertAI uses 2rem for better readability */<br />
+ margin: 0;<br />
+ padding: 2rem;<br />
+ max-width: 1024px;<br />
+ margin: 0 auto;<br />
+}</p>
 
-    <section id="text">
-        <h2>2. Text Formatting</h2>
-        
-        <p>This is a <strong>bold text</strong> and this is <b>also bold</b>.</p>
-        
-        <p>This is <em>italic text</em> and this is <i>also italic</i>.</p>
-        
-        <p>This is <strong><em>bold and italic</em></strong> combined.</p>
-        
-        <p>This is <del>deleted text</del> and this is <s>strikethrough</s>.</p>
-        
-        <p>This is <ins>inserted text</ins> and this is <u>underlined</u>.</p>
-        
-        <p>This is <mark>highlighted text</mark> using the mark element.</p>
-        
-        <p>This is <small>small text</small> and this is <sup>superscript</sup> and <sub>subscript</sub>.</p>
-        
-        <p>This is <code>inline code</code> within a sentence.</p>
-        
-        <p>This is <abbr title="HyperText Markup Language">HTML</abbr> abbreviation with tooltip.</p>
-        
-        <p>This is a <q>short inline quotation</q> element.</p>
-        
-        <blockquote cite="https://example.com">
-            <p>This is a block quotation that can span multiple lines. It's typically used for longer quotes and provides proper semantic meaning.</p>
-            <footer>— <cite>Famous Author</cite></footer>
-        </blockquote>
+<p>/* Paragraphs with proper spacing (ConvertAI-style) <em>/<br />
+p {<br />
+ margin: 0 0 1.33999rem 0;<br />
+ padding-top: 0.66001rem;<br />
+ font-feature-settings: &#8220;kern&#8221; 1, &#8220;onum&#8221; 1, &#8220;liga&#8221; 1; /</em> Typography features */<br />
+}</p>
 
-        <p>Mathematical formula: E = mc<sup>2</sup></p>
-        <p>Chemical formula: H<sub>2</sub>O</p>
-    </section>
+<p>/* Lists with proper spacing */<br />
+ul, ol {<br />
+ margin-bottom: 0.83999rem;<br />
+ padding-top: 0.16001rem;<br />
+}</p>
 
-    <hr>
+<p>li {<br />
+ font-feature-settings: &#8220;kern&#8221; 1, &#8220;onum&#8221; 1, &#8220;liga&#8221; 1;<br />
+ margin-left: 1rem;<br />
+}</p>
 
-    <section id="lists">
-        <h2>3. Lists</h2>
-        
-        <h3>3.1 Unordered List</h3>
-        <ul>
-            <li>First item</li>
-            <li>Second item</li>
-            <li>Third item with nested list:
-                <ul>
-                    <li>Nested item 1</li>
-                    <li>Nested item 2</li>
-                    <li>Deep nested:
-                        <ul>
-                            <li>Level 3 item</li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li>Fourth item</li>
-        </ul>
+<p>li &gt; ul, li &gt; ol {<br />
+ margin-bottom: 0;<br />
+}</p>
 
-        <h3>3.2 Ordered List</h3>
-        <ol>
-            <li>First step</li>
-            <li>Second step</li>
-            <li>Third step with nested:
-                <ol type="a">
-                    <li>Sub-step A</li>
-                    <li>Sub-step B</li>
-                    <li>Sub-step C</li>
-                </ol>
-            </li>
-            <li>Fourth step</li>
-        </ol>
+<p>/* Headings with ConvertAI typography */<br />
+h1, h2, h3, h4, h5, h6 {<br />
+ font-family: &#8220;Source Sans Pro&#8221;, &#8220;Segoe UI&#8221;, &#8220;Helvetica Neue&#8221;, Helvetica, Arial, sans-serif;<br />
+ font-feature-settings: &#8220;dlig&#8221; 1, &#8220;liga&#8221; 1, &#8220;lnum&#8221; 1, &#8220;kern&#8221; 1;<br />
+ font-weight: 600;<br />
+ margin-top: 0;<br />
+ line-height: 1.3;<br />
+ color: #2c3e50;<br />
+}</p>
 
-        <h3>3.3 Description List</h3>
-        <dl>
-            <dt>HTML</dt>
-            <dd>HyperText Markup Language - the standard markup language for web pages</dd>
-            
-            <dt>CSS</dt>
-            <dd>Cascading Style Sheets - used for styling HTML documents</dd>
-            
-            <dt>JavaScript</dt>
-            <dd>A programming language that enables interactive web pages</dd>
-        </dl>
-    </section>
+<p>h1 {<br />
+ font-size: 2.0571428571rem;<br />
+ line-height: 3rem;<br />
+ margin-bottom: 0.21999rem;<br />
+ padding-top: 0.78001rem;<br />
+ border-bottom: 2px solid #e8e8e8;<br />
+ padding-bottom: 0.3em;<br />
+}</p>
 
-    <hr>
+<p>h2 {<br />
+ font-size: 1.953125rem;<br />
+ line-height: 3rem;<br />
+ margin-bottom: 0.18358375rem;<br />
+ padding-top: 0.81641625rem;<br />
+ border-bottom: 1px solid #e8e8e8;<br />
+ padding-bottom: 0.3em;<br />
+}</p>
 
-    <section id="tables">
-        <h2>4. Tables</h2>
-        
-        <h3>4.1 Simple Table</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Age</th>
-                    <th>City</th>
-                    <th>Occupation</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Alice Johnson</td>
-                    <td>28</td>
-                    <td>New York</td>
-                    <td>Software Engineer</td>
-                </tr>
-                <tr>
-                    <td>Bob Smith</td>
-                    <td>34</td>
-                    <td>London</td>
-                    <td>Data Scientist</td>
-                </tr>
-                <tr>
-                    <td>Charlie Brown</td>
-                    <td>45</td>
-                    <td>Tokyo</td>
-                    <td>Product Manager</td>
-                </tr>
-            </tbody>
-        </table>
+<p>h3 {<br />
+ font-size: 1.6457142857rem;<br />
+ line-height: 3rem;<br />
+ margin-bottom: 0.07599rem;<br />
+ padding-top: 0.92401rem;<br />
+}</p>
 
-        <h3>4.2 Complex Table with Colspan and Rowspan</h3>
-        <table>
-            <caption>Quarterly Sales Report</caption>
-            <thead>
-                <tr>
-                    <th rowspan="2">Region</th>
-                    <th colspan="3">Quarter 1</th>
-                    <th rowspan="2">Total</th>
-                </tr>
-                <tr>
-                    <th>Jan</th>
-                    <th>Feb</th>
-                    <th>Mar</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>North</td>
-                    <td>$10,000</td>
-                    <td>$12,000</td>
-                    <td>$15,000</td>
-                    <td>$37,000</td>
-                </tr>
-                <tr>
-                    <td>South</td>
-                    <td>$8,000</td>
-                    <td>$9,500</td>
-                    <td>$11,000</td>
-                    <td>$28,500</td>
-                </tr>
-                <tr>
-                    <td>East</td>
-                    <td>$12,000</td>
-                    <td>$14,000</td>
-                    <td>$13,500</td>
-                    <td>$39,500</td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th>Total</th>
-                    <th>$30,000</th>
-                    <th>$35,500</th>
-                    <th>$39,500</th>
-                    <th>$105,000</th>
-                </tr>
-            </tfoot>
-        </table>
-    </section>
+<p>h4 {<br />
+ font-size: 1.5625rem;<br />
+ margin-bottom: 0.546865rem;<br />
+ padding-top: 0.453135rem;<br />
+}</p>
 
-    <hr>
+<p>h5 {<br />
+ font-size: 1.25rem;<br />
+ margin-bottom: -0.56251rem;<br />
+ padding-top: 0.56251rem;<br />
+}</p>
 
-    <section id="code">
-        <h2>5. Code Blocks</h2>
-        
-        <h3>5.1 Inline Code</h3>
-        <p>Use the <code>print()</code> function to display output in Python.</p>
-        <p>In JavaScript, use <code>console.log()</code> for debugging.</p>
+<p>h6 {<br />
+ font-size: 1rem;<br />
+ margin-bottom: -0.65001rem;<br />
+ padding-top: 0.65001rem;<br />
+}</p>
 
-        <h3>5.2 Preformatted Code Block</h3>
-        <pre><code>def calculate_fibonacci(n):
+<p>h5 {<br />
+ font-size: 1.125rem;<br />
+}</p>
+
+<p>h6 {<br />
+ font-size: 1rem;<br />
+ color: #6c757d;<br />
+}</p>
+
+<p>/* Paragraphs &amp; Text */<br />
+p {<br />
+ margin: 0 0 1.25rem;<br />
+}</p>
+
+<p>strong, b {<br />
+ font-weight: 600;<br />
+}</p>
+
+<p>em, i {<br />
+ font-style: italic;<br />
+}</p>
+
+<p>/* Links with ConvertAI styling <em>/<br />
+a {<br />
+ color: #35D7BB; /</em> ConvertAI&#8217;s teal accent */<br />
+ text-decoration: none;<br />
+ cursor: pointer;<br />
+}</p>
+
+<p>a:hover, a:focus {<br />
+ border-bottom-color: #35D7BB;<br />
+ color: #2ac5a9;<br />
+}</p>
+
+<p>/* Code Blocks - ConvertAI Style */<br />
+code {<br />
+ color: #c7254e;<br />
+ background-color: #f9f2f4;<br />
+ padding: 2px 4px;<br />
+ border-radius: 4px;<br />
+ font-family: &#8220;Courier New&#8221;, Courier, monospace;<br />
+ font-size: 0.9em;<br />
+}</p>
+
+<p>pre {<br />
+ display: block;<br />
+ margin: 0 0 1.33999rem;<br />
+ padding: 0.66001rem 9.5px 9.5px;<br />
+ font-size: 1rem;<br />
+ line-height: 2rem;<br />
+ word-break: break-all;<br />
+ word-wrap: break-word;<br />
+ color: #333;<br />
+ background: linear-gradient(<br />
+ to bottom,<br />
+ #fff 0, #fff 0.75rem,<br />
+ #f5f7fa 0.75rem, #f5f7fa 2.75rem,<br />
+ #fff 2.75rem, #fff 4rem<br />
+ );<br />
+ background-size: 100% 4rem;<br />
+ border: 1px solid #d3daea;<br />
+ border-radius: 4px;<br />
+ overflow: auto;<br />
+}</p>
+
+<p>pre code {<br />
+ padding: 0;<br />
+ font-size: inherit;<br />
+ color: inherit;<br />
+ white-space: pre-wrap;<br />
+ background-color: transparent;<br />
+ border-radius: 0;<br />
+}</p>
+
+<p>/* Blockquote - ConvertAI Style */<br />
+blockquote {<br />
+ margin: 0;<br />
+ border-left: 3px solid #A0AABF;<br />
+ padding: 0.66001rem 1rem 1rem;<br />
+ font-style: italic;<br />
+ color: #666;<br />
+ background-color: #f9f9f9;<br />
+}</p>
+
+<p>blockquote p {<br />
+ margin-bottom: 0.33999rem;<br />
+ padding-top: 0.66001rem;<br />
+ font-size: 1rem;<br />
+}</p>
+
+<p>/* Tables - ConvertAI/Bootstrap Style */<br />
+table {<br />
+ background-color: transparent;<br />
+ border-collapse: collapse;<br />
+ border-spacing: 0;<br />
+}</p>
+
+<p>th {<br />
+ text-align: left;<br />
+}</p>
+
+<p>.table, table {<br />
+ width: 100%;<br />
+ max-width: 100%;<br />
+ margin-bottom: 20px;<br />
+}</p>
+
+<p>.table &gt; thead &gt; tr &gt; th,<br />
+table &gt; thead &gt; tr &gt; th {<br />
+ padding: 8px;<br />
+ line-height: 1.428571429;<br />
+ vertical-align: bottom;<br />
+ border-top: 1px solid #ddd;<br />
+ border-bottom: 2px solid #ddd;<br />
+}</p>
+
+<p>.table &gt; thead &gt; tr &gt; td,<br />
+.table &gt; tbody &gt; tr &gt; th,<br />
+.table &gt; tbody &gt; tr &gt; td,<br />
+.table &gt; tfoot &gt; tr &gt; th,<br />
+.table &gt; tfoot &gt; tr &gt; td,<br />
+table &gt; thead &gt; tr &gt; td,<br />
+table &gt; tbody &gt; tr &gt; th,<br />
+table &gt; tbody &gt; tr &gt; td,<br />
+table &gt; tfoot &gt; tr &gt; th,<br />
+table &gt; tfoot &gt; tr &gt; td {<br />
+ padding: 8px;<br />
+ line-height: 1.428571429;<br />
+ vertical-align: top;<br />
+ border-top: 1px solid #ddd;<br />
+}</p>
+
+<p>/* Bootstrap table-bordered */<br />
+.table-bordered,<br />
+.table-bordered &gt; thead &gt; tr &gt; th,<br />
+.table-bordered &gt; thead &gt; tr &gt; td,<br />
+.table-bordered &gt; tbody &gt; tr &gt; th,<br />
+.table-bordered &gt; tbody &gt; tr &gt; td,<br />
+.table-bordered &gt; tfoot &gt; tr &gt; th,<br />
+.table-bordered &gt; tfoot &gt; tr &gt; td {<br />
+ border: 1px solid #ddd;<br />
+}</p>
+
+<p>.table-bordered &gt; thead &gt; tr &gt; th,<br />
+.table-bordered &gt; thead &gt; tr &gt; td {<br />
+ border-bottom-width: 2px;<br />
+}</p>
+
+<p>/* Bootstrap table-striped */<br />
+.table-striped &gt; tbody &gt; tr:nth-child(odd) &gt; td,<br />
+.table-striped &gt; tbody &gt; tr:nth-child(odd) &gt; th {<br />
+ background-color: #f9f9f9;<br />
+}</p>
+
+<p>/* Table hover effect */<br />
+.table-hover &gt; tbody &gt; tr:hover &gt; td,<br />
+.table-hover &gt; tbody &gt; tr:hover &gt; th {<br />
+ background-color: #f5f5f5;<br />
+}</p>
+
+<p>/* Horizontal Rule */<br />
+hr {<br />
+ border: none;<br />
+ border-top: 2px solid #e0e0e0;<br />
+ margin: 32px 0;<br />
+}</p>
+
+<p>/* Images */<br />
+img {<br />
+ max-width: 100%;<br />
+ height: auto;<br />
+ margin: 20px 0;<br />
+ border-radius: 4px;<br />
+ box-shadow: 0 2px 6px rgba(0,0,0,0.1);<br />
+}</p>
+
+<p>blockquote p {<br />
+ margin-bottom: 0.5rem;<br />
+}</p>
+
+<p>blockquote p:last-child {<br />
+ margin-bottom: 0;<br />
+}</p>
+
+<p>/* Tables - Professional Styling */<br />
+table {<br />
+ width: 100%;<br />
+ max-width: 100%;<br />
+ margin-bottom: 1.25rem;<br />
+ background-color: transparent;<br />
+ border-collapse: collapse;<br />
+ border-spacing: 0;<br />
+}</p>
+
+<p>table th,<br />
+table td {<br />
+ padding: 0.75rem;<br />
+ vertical-align: top;<br />
+ border: 1px solid #d0d7de;<br />
+ text-align: left;<br />
+ line-height: 1.5;<br />
+}</p>
+
+<p>table thead th {<br />
+ vertical-align: bottom;<br />
+ border-bottom: 2px solid #d0d7de;<br />
+ background-color: #f6f8fa;<br />
+ font-weight: 600;<br />
+ color: #24292f;<br />
+}</p>
+
+<p>table tbody tr:nth-child(odd) {<br />
+ background-color: #f6f8fa;<br />
+}</p>
+
+<p>table tbody tr:hover {<br />
+ background-color: #f0f3f5;<br />
+}</p>
+
+<p>/* Striped Tables */<br />
+.table-striped tbody tr:nth-child(odd) {<br />
+ background-color: #f9f9f9;<br />
+}</p>
+
+<p>/* Bordered Tables */<br />
+.table-bordered,<br />
+.table-bordered th,<br />
+.table-bordered td {<br />
+ border: 1px solid #d0d7de;<br />
+}</p>
+
+<p>.table-bordered thead th,<br />
+.table-bordered thead td {<br />
+ border-bottom-width: 2px;<br />
+}</p>
+
+<p>/* Horizontal Rules */<br />
+hr {<br />
+ height: 0.25rem;<br />
+ padding: 0;<br />
+ margin: 1.5rem 0;<br />
+ background-color: #e8e8e8;<br />
+ border: 0;<br />
+}</p>
+
+<p>/* Images */<br />
+img {<br />
+ max-width: 100%;<br />
+ height: auto;<br />
+ border-radius: 4px;<br />
+ margin: 1rem 0;<br />
+}</p>
+
+<p>/* Task Lists */<br />
+input[type="checkbox"] {<br />
+ margin-right: 0.5rem;<br />
+}</p>
+
+<p>/* Keyboard Keys */<br />
+kbd {<br />
+ display: inline-block;<br />
+ padding: 0.1875rem 0.375rem;<br />
+ font-size: 0.875em;<br />
+ font-family: &#8220;Consolas&#8221;, &#8220;Monaco&#8221;, &#8220;Courier New&#8221;, monospace;<br />
+ color: #24292f;<br />
+ background-color: #f6f8fa;<br />
+ border: 1px solid #d0d7de;<br />
+ border-radius: 3px;<br />
+ box-shadow: inset 0 -1px 0 rgba(175, 184, 193, 0.2);<br />
+}</p>
+
+<p>/* Responsive Tables */<br />
+@media screen and (max-width: 768px) {<br />
+ table {<br />
+ display: block;<br />
+ overflow-x: auto;<br />
+ -webkit-overflow-scrolling: touch;<br />
+ }</p>
+
+<p>body {<br />
+ padding: 1rem;<br />
+ }</p>
+
+<p>h1 {<br />
+ font-size: 1.75rem;<br />
+ }</p>
+
+<p>h2 {<br />
+ font-size: 1.5rem;<br />
+ }</p>
+
+<p>h3 {<br />
+ font-size: 1.25rem;<br />
+ }<br />
+}</p>
+
+<p>/* Print Styles */<br />
+@media print {<br />
+ body {<br />
+ font-size: 12pt;<br />
+ color: #000;<br />
+ }</p>
+
+<p>h1, h2, h3, h4, h5, h6 {<br />
+ page-break-after: avoid;<br />
+ }</p>
+
+<p>pre, blockquote, table, img {<br />
+ page-break-inside: avoid;<br />
+ }</p>
+
+<p>a {<br />
+ color: #000;<br />
+ text-decoration: underline;<br />
+ }</p>
+
+<p>thead {<br />
+ display: table-header-group;<br />
+ }<br />
+}</p>
+
+<p>/* Utility Classes */<br />
+.text-center {<br />
+ text-align: center;<br />
+}</p>
+
+<p>.text-right {<br />
+ text-align: right;<br />
+}</p>
+
+<p>.text-left {<br />
+ text-align: left;<br />
+}</p>
+
+<p>.mt-1 { margin-top: 0.5rem; }<br />
+.mt-2 { margin-top: 1rem; }<br />
+.mt-3 { margin-top: 1.5rem; }<br />
+.mb-1 { margin-bottom: 0.5rem; }<br />
+.mb-2 { margin-bottom: 1rem; }<br />
+.mb-3 { margin-bottom: 1.5rem; }</p>
+
+<p>﻿\</p>
+
+<p>Comprehensive HTML Test Document</p>
+
+<p>body {\</p>
+
+<p>font-family: Georgia, ‘Times New Roman’, serif;\</p>
+
+<p>line-height: 1.8;\</p>
+
+<p>max-width: 900px;\</p>
+
+<p>margin: 0 auto;\</p>
+
+<p>padding: 20px;\</p>
+
+<p>color: #333;\</p>
+
+<p>}\</p>
+
+<p>h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }\</p>
+
+<p>h2 { color: #34495e; border-bottom: 2px solid #95a5a6; padding-bottom: 8px; }\</p>
+
+<p>h3 { color: #7f8c8d; }\</p>
+
+<p>table { border-collapse: collapse; width: 100%; margin: 20px 0; }\</p>
+
+<p>th, td { border: 1px solid #bdc3c7; padding: 12px; text-align: left; }\</p>
+
+<p>th { background-color: #3498db; color: white; font-weight: 600; }\</p>
+
+<p>tr:nth-child(even) { background-color: #ecf0f1; }\</p>
+
+<p>code { background-color: #f8f9fa; padding: 2px 6px; border-radius: 3px; font-family: ‘Courier New’, monospace; }\</p>
+
+<p>pre { background-color: #2c3e50; color: #ecf0f1; padding: 15px; border-radius: 5px; overflow-x: auto; }\</p>
+
+<p>blockquote { border-left: 4px solid #3498db; margin: 20px 0; padding: 10px 20px; background-color: #ecf0f1; font-style: italic; }\</p>
+
+<p>.highlight { background-color: #f39c12; padding: 2px 4px; }\</p>
+
+<p>.footer { margin-top: 40px; padding-top: 20px; border-top: 2px solid #95a5a6; text-align: center; color: #7f8c8d; }</p>
+
+<h1 id="comprehensive-html-test-document">Comprehensive HTML Test Document</h1>
+
+<p><strong><em>*</strong></em>Purpose:<strong><em>*</strong></em> Test all HTML elements for conversion quality</p>
+
+<p><strong><em>*Created:</em></strong>* November 10, 2025 | <strong><em>*Version:</em></strong>* 1.0</p>
+
+<hr />
+
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ul>
+<li><a href="#headings">Headings</a></li>
+<li><a href="#text">Text Formatting</a></li>
+<li><a href="#lists">Lists</a></li>
+<li><a href="#tables">Tables</a></li>
+<li><a href="#code">Code Blocks</a></li>
+<li><a href="#media">Media Elements</a></li>
+<li><a href="#forms">Forms</a></li>
+</ul>
+
+<hr />
+
+<h2 id="1-heading-hierarchy">1. Heading Hierarchy</h2>
+
+<h1 id="heading-level-1">Heading Level 1</h1>
+
+<h2 id="heading-level-2">Heading Level 2</h2>
+
+<h3 id="heading-level-3">Heading Level 3</h3>
+
+<h4 id="heading-level-4">Heading Level 4</h4>
+
+<h5 id="heading-level-5">Heading Level 5</h5>
+
+<h6 id="heading-level-6">Heading Level 6</h6>
+
+<hr />
+
+<h2 id="2-text-formatting">2. Text Formatting</h2>
+
+<p>This is a <strong><em>*</strong></em>bold text<strong><em>*</strong></em> and this is <strong><em>*</strong></em>also bold<strong><em>*</strong></em>.</p>
+
+<p>This is <strong><em>*italic text</em></strong>* and this is <strong><em>*also italic</em></strong>*.</p>
+
+<p>This is <strong><em>*</strong><strong></em><em></strong></em>bold and italic<strong><em>*</strong></em>** combined.</p>
+
+<p>This is <s>deleted text</s> and this is <s>strikethrough</s>.</p>
+
+<p>This is inserted text and this is underlined.</p>
+
+<p>This is highlighted text using the mark element.</p>
+
+<p>This is small text and this is superscript and subscript.</p>
+
+<p>This is <code>inline code</code> within a sentence.</p>
+
+<p>This is HTML abbreviation with tooltip.</p>
+
+<p>This is a short inline quotation element.</p>
+
+<p>&gt;</p>
+
+<p>&gt;</p>
+
+<blockquote>
+  <p>This is a block quotation that can span multiple lines. It’s typically used for longer quotes and provides proper semantic meaning.</p>
+  
+  <p>— Famous Author</p>
+</blockquote>
+
+<p>Mathematical formula: E = mc2</p>
+
+<p>Chemical formula: H2O</p>
+
+<hr />
+
+<h2 id="3-lists">3. Lists</h2>
+
+<h3 id="31-unordered-list">3.1 Unordered List</h3>
+
+<ul>
+<li>First item</li>
+<li>Second item</li>
+<li>Third item with nested list:
+<ul>
+<li>Nested item 1</li>
+<li>Nested item 2</li>
+<li>Deep nested:
+<ul>
+<li>Level 3 item</li>
+</ul></li>
+</ul></li>
+<li>Fourth item</li>
+</ul>
+
+<h3 id="32-ordered-list">3.2 Ordered List</h3>
+
+<ol>
+<li>First step</li>
+<li>Second step</li>
+<li>Third step with nested:
+<ol>
+<li>Sub-step A</li>
+<li>Sub-step B</li>
+<li>Sub-step C</li>
+</ol></li>
+<li>Fourth step</li>
+</ol>
+
+<h3 id="33-description-list">3.3 Description List</h3>
+
+<p>HTML\</p>
+
+<p>HyperText Markup Language - the standard markup language for web pages\</p>
+
+<p>CSS\</p>
+
+<p>Cascading Style Sheets - used for styling HTML documents\</p>
+
+<p>JavaScript\</p>
+
+<p>A programming language that enables interactive web pages</p>
+
+<hr />
+
+<h2 id="4-tables">4. Tables</h2>
+
+<h3 id="41-simple-table">4.1 Simple Table</h3>
+
+<table>
+<thead>
+<tr>
+  <th>Name</th>
+  <th>Age</th>
+  <th>City</th>
+  <th>Occupation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Alice Johnson</td>
+  <td>28</td>
+  <td>New York</td>
+  <td>Software Engineer</td>
+</tr>
+<tr>
+  <td>Bob Smith</td>
+  <td>34</td>
+  <td>London</td>
+  <td>Data Scientist</td>
+</tr>
+<tr>
+  <td>Charlie Brown</td>
+  <td>45</td>
+  <td>Tokyo</td>
+  <td>Product Manager</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="42-complex-table-with-colspan-and-rowspan">4.2 Complex Table with Colspan and Rowspan</h3>
+
+<table>
+<thead>
+<tr>
+  <th>Quarterly Sales Report</th>
+  <th>Region</th>
+  <th>Quarter 1</th>
+  <th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Jan</td>
+  <td>Feb</td>
+  <td>Mar</td>
+</tr>
+<tr>
+  <td>North</td>
+  <td>$10,000</td>
+  <td>$12,000</td>
+  <td>$15,000</td>
+  <td>$37,000</td>
+</tr>
+<tr>
+  <td>South</td>
+  <td>$8,000</td>
+  <td>$9,500</td>
+  <td>$11,000</td>
+  <td>$28,500</td>
+</tr>
+<tr>
+  <td>East</td>
+  <td>$12,000</td>
+  <td>$14,000</td>
+  <td>$13,500</td>
+  <td>$39,500</td>
+</tr>
+<tr>
+  <td>Total</td>
+  <td>$30,000</td>
+  <td>$35,500</td>
+  <td>$39,500</td>
+  <td>$105,000</td>
+</tr>
+<tr>
+  <td>—</td>
+  <td>—</td>
+  <td>—</td>
+  <td>—</td>
+  <td>—</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2 id="5-code-blocks">5. Code Blocks</h2>
+
+<h3 id="51-inline-code">5.1 Inline Code</h3>
+
+<p>Use the <code>print()</code> function to display output in Python.</p>
+
+<p>In JavaScript, use <code>console.log()</code> for debugging.</p>
+
+<h3 id="52-preformatted-code-block">5.2 Preformatted Code Block</h3>
+
+<pre><code>def calculate_fibonacci(n):
     """
     Calculate the nth Fibonacci number
     Args:
@@ -252,174 +1178,173 @@
     Returns:
         int: Fibonacci number
     """
-    if n <= 1:
+    if n &lt;= 1:
         return n
     else:
         return calculate_fibonacci(n-1) + calculate_fibonacci(n-2)
 
 # Test
 for i in range(10):
-    print(f"F({i}) = {calculate_fibonacci(i)}")</code></pre>
+    print(f"F({i}) = {calculate_fibonacci(i)}")
 
-        <h3>5.3 SQL Query Example</h3>
-        <pre><code>SELECT 
+</code></pre>
+
+<h3 id="53-sql-query-example">5.3 SQL Query Example</h3>
+
+<pre><code>SELECT
     customers.name,
     COUNT(orders.id) as total_orders,
     SUM(orders.amount) as total_spent
 FROM customers
 LEFT JOIN orders ON customers.id = orders.customer_id
-WHERE orders.order_date >= '2024-01-01'
+WHERE orders.order_date &gt;= '2024-01-01'
 GROUP BY customers.name
-HAVING total_orders > 5
+HAVING total_orders &gt; 5
 ORDER BY total_spent DESC
-LIMIT 10;</code></pre>
-    </section>
+LIMIT 10;
 
-    <hr>
+</code></pre>
 
-    <section id="media">
-        <h2>6. Media Elements</h2>
-        
-        <h3>6.1 Images</h3>
-        <figure>
-            <img src="https://via.placeholder.com/400x200" alt="Placeholder image" width="400" height="200">
-            <figcaption>Figure 1: This is a sample image with caption</figcaption>
-        </figure>
+<hr />
 
-        <h3>6.2 Links</h3>
-        <p>Visit <a href="https://www.google.com" target="_blank">Google</a> for search.</p>
-        <p>Internal link: <a href="#headings">Jump to Headings section</a></p>
-        <p>Email link: <a href="mailto:example@email.com">example@email.com</a></p>
+<h2 id="6-media-elements">6. Media Elements</h2>
 
-        <h3>6.3 Embedded Content</h3>
-        <p>Video and audio elements would go here (not included to keep file size small).</p>
-    </section>
+<h3 id="61-images">6.1 Images</h3>
 
-    <hr>
+<p><img src="https://via.placeholder.com/400x200" alt="Placeholder image" />\</p>
 
-    <section id="forms">
-        <h2>7. Form Elements</h2>
-        
-        <form action="#" method="post">
-            <fieldset>
-                <legend>User Information</legend>
-                
-                <div>
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" placeholder="Enter your name" required>
-                </div>
-                
-                <div>
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" placeholder="your@email.com" required>
-                </div>
-                
-                <div>
-                    <label for="age">Age:</label>
-                    <input type="number" id="age" name="age" min="18" max="100">
-                </div>
-                
-                <div>
-                    <label for="country">Country:</label>
-                    <select id="country" name="country">
-                        <option value="">Select a country</option>
-                        <option value="us">United States</option>
-                        <option value="uk">United Kingdom</option>
-                        <option value="ca">Canada</option>
-                        <option value="au">Australia</option>
-                    </select>
-                </div>
-                
-                <div>
-                    <label>Gender:</label>
-                    <label><input type="radio" name="gender" value="male"> Male</label>
-                    <label><input type="radio" name="gender" value="female"> Female</label>
-                    <label><input type="radio" name="gender" value="other"> Other</label>
-                </div>
-                
-                <div>
-                    <label>Interests:</label>
-                    <label><input type="checkbox" name="interests" value="coding"> Coding</label>
-                    <label><input type="checkbox" name="interests" value="reading"> Reading</label>
-                    <label><input type="checkbox" name="interests" value="sports"> Sports</label>
-                </div>
-                
-                <div>
-                    <label for="message">Message:</label>
-                    <textarea id="message" name="message" rows="4" cols="50" placeholder="Your message here..."></textarea>
-                </div>
-                
-                <div>
-                    <button type="submit">Submit</button>
-                    <button type="reset">Reset</button>
-                </div>
-            </fieldset>
-        </form>
-    </section>
+<p>Figure 1: This is a sample image with caption</p>
 
-    <hr>
+<h3 id="62-links">6.2 Links</h3>
 
-    <section>
-        <h2>8. Semantic HTML5 Elements</h2>
-        
-        <article>
-            <header>
-                <h3>Article Title</h3>
-                <p><time datetime="2025-11-10">November 10, 2025</time></p>
-            </header>
-            <p>This is the article content. Articles are self-contained compositions that could be independently distributed.</p>
-            <footer>
-                <p>Article footer with additional information</p>
-            </footer>
-        </article>
+<p>Visit <a rel="noopener" target="_blank" href="https://www.google.com">Google</a> for search.</p>
 
-        <aside>
-            <h4>Sidebar Information</h4>
-            <p>This is sidebar content that provides supplementary information.</p>
-        </aside>
+<p>Internal link: <a href="#headings">Jump to Headings section</a></p>
 
-        <details>
-            <summary>Click to expand details</summary>
-            <p>This content is hidden by default and can be toggled by clicking the summary.</p>
-        </details>
-    </section>
+<p>Email link: <a rel="noopener" target="_blank" href="mailto:example@email.com">example@email.com</a></p>
 
-    <hr>
+<h3 id="63-embedded-content">6.3 Embedded Content</h3>
 
-    <section>
-        <h2>9. Special Characters & Entities</h2>
-        <p>&lt; Less than</p>
-        <p>&gt; Greater than</p>
-        <p>&amp; Ampersand</p>
-        <p>&quot; Quote</p>
-        <p>&apos; Apostrophe</p>
-        <p>&copy; Copyright</p>
-        <p>&reg; Registered</p>
-        <p>&trade; Trademark</p>
-        <p>&euro; Euro</p>
-        <p>&pound; Pound</p>
-        <p>&yen; Yen</p>
-    </section>
+<p>Video and audio elements would go here (not included to keep file size small).</p>
 
-    <hr>
+<hr />
 
-    <footer class="footer">
-        <p><strong>Document Summary</strong></p>
-        <p>This comprehensive HTML document includes:</p>
-        <ul style="list-style: none; padding: 0;">
-            <li>✓ All heading levels (h1-h6)</li>
-            <li>✓ Text formatting (bold, italic, underline, strike, etc.)</li>
-            <li>✓ Lists (unordered, ordered, description)</li>
-            <li>✓ Tables (simple and complex with colspan/rowspan)</li>
-            <li>✓ Code blocks (inline and preformatted)</li>
-            <li>✓ Forms (inputs, select, radio, checkbox, textarea)</li>
-            <li>✓ Semantic HTML5 elements (article, aside, details)</li>
-            <li>✓ Special characters and entities</li>
-        </ul>
-        <p><em>Total: 9 sections covering 60+ HTML elements</em></p>
-        <hr>
-        <p>&copy; 2025 ConverterAI | Comprehensive Test Suite v1.0</p>
-    </footer>
+<h2 id="7-form-elements">7. Form Elements</h2>
+
+<p>User Information</p>
+
+<p>Name:</p>
+
+<p>Email:</p>
+
+<p>Age:</p>
+
+<p>Country:</p>
+
+<p>Select a country\</p>
+
+<p>United States\</p>
+
+<p>United Kingdom\</p>
+
+<p>Canada\</p>
+
+<p>Australia</p>
+
+<p>Gender:\</p>
+
+<p>Male\</p>
+
+<p>Female\</p>
+
+<p>Other</p>
+
+<p>Interests:\</p>
+
+<p>Coding\</p>
+
+<p>Reading\</p>
+
+<p>Sports</p>
+
+<p>Message:</p>
+
+<p>Submit\</p>
+
+<p>Reset</p>
+
+<hr />
+
+<h2 id="8-semantic-html5-elements">8. Semantic HTML5 Elements</h2>
+
+<h3 id="article-title">Article Title</h3>
+
+<p>November 10, 2025</p>
+
+<p>This is the article content. Articles are self-contained compositions that could be independently distributed.</p>
+
+<p>Article footer with additional information</p>
+
+<h4 id="sidebar-information">Sidebar Information</h4>
+
+<p>This is sidebar content that provides supplementary information.</p>
+
+<p>Click to expand details\</p>
+
+<p>This content is hidden by default and can be toggled by clicking the summary.</p>
+
+<hr />
+
+<h2 id="9-special-characters-entities">9. Special Characters &amp; Entities</h2>
+
+<p>&lt; Less than</p>
+
+<p>&gt;</p>
+
+<blockquote>
+  <p>Greater than</p>
+</blockquote>
+
+<p>&amp; Ampersand</p>
+
+<p>" Quote</p>
+
+<p>' Apostrophe</p>
+
+<p>© Copyright</p>
+
+<p>® Registered</p>
+
+<p>™ Trademark</p>
+
+<p>€ Euro</p>
+
+<p>£ Pound</p>
+
+<p>¥ Yen</p>
+
+<hr />
+
+<p><strong><em>*</strong></em>Document Summary<strong><em>*</strong></em></p>
+
+<p>This comprehensive HTML document includes:</p>
+
+<ul>
+<li>✓ All heading levels (h1-h6)</li>
+<li>✓ Text formatting (bold, italic, underline, strike, etc.)</li>
+<li>✓ Lists (unordered, ordered, description)</li>
+<li>✓ Tables (simple and complex with colspan/rowspan)</li>
+<li>✓ Code blocks (inline and preformatted)</li>
+<li>✓ Forms (inputs, select, radio, checkbox, textarea)</li>
+<li>✓ Semantic HTML5 elements (article, aside, details)</li>
+<li>✓ Special characters and entities</li>
+</ul>
+
+<p><strong><em>*Total: 9 sections covering 60+ HTML elements</em></strong>*</p>
+
+<hr />
+
+<p>© 2025 ConverterAI | Comprehensive Test Suite v1.0</p>
 
 </body>
 </html>

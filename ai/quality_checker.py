@@ -309,6 +309,8 @@ Respond in JSON format:
         """Convert score to quality rating"""
         if score >= QUALITY_THRESHOLDS['excellent']:
             return 'excellent'
+        elif score >= QUALITY_THRESHOLDS.get('very_good', 0.80):
+            return 'very_good'
         elif score >= QUALITY_THRESHOLDS['good']:
             return 'good'
         elif score >= QUALITY_THRESHOLDS['acceptable']:
