@@ -61,6 +61,10 @@ Tarayıcıda aç: **http://localhost:5000**
 # Basit dönüşüm
 python cli.py convert document.pdf --to docx
 
+# Görsel dönüştürme (YENİ!)
+python cli.py convert scan.png --to pdf
+python cli.py convert photo.jpg --to markdown
+
 # Kalite kontrolü ile
 python cli.py convert document.pdf --to html --quality-check
 
@@ -119,6 +123,12 @@ if result.success:
   → PDF
   → DOCX
   → Markdown
+
+🖼️ IMAGE (PNG/JPG/JPEG) [YENİ!]
+  → PDF
+  → DOCX
+  → Markdown
+  → HTML
 ```
 
 ## 🔧 Opsiyonel Araçlar

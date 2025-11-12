@@ -8,6 +8,7 @@ from converters.pdf_converter import PDFConverter
 from converters.docx_converter import DOCXConverter
 from converters.markdown_converter import MarkdownConverter
 from converters.html_converter import HTMLConverter
+from converters.image_converter import ImageConverter
 from utils.validator import Validator
 from utils.logger import logger
 from config import SUPPORTED_CONVERSIONS
@@ -22,6 +23,7 @@ class UniversalConverter(BaseConverter):
         self.docx_converter = DOCXConverter()
         self.markdown_converter = MarkdownConverter()
         self.html_converter = HTMLConverter()
+        self.image_converter = ImageConverter()
         self.validator = Validator()
     
     def convert(
@@ -111,6 +113,8 @@ class UniversalConverter(BaseConverter):
                 result = self.markdown_converter.convert(input_file, output_file, **options)
             elif input_format == 'html':
                 result = self.html_converter.convert(input_file, output_file, **options)
+            elif input_format == 'image':
+                result = self.image_converter.convert(input_file, output_file, **options)
             else:
                 return self._create_error_result(
                     input_file,

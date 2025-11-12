@@ -3,11 +3,12 @@ OCR Engine for extracting text from scanned documents
 """
 from typing import Optional, Dict, Any
 from pathlib import Path
+import os
 import pytesseract
 from PIL import Image
 from pdf2image import convert_from_path
 from utils.logger import logger
-from config import OCR_LANGUAGE, DEFAULT_DPI
+from config import OCR_LANGUAGE, DEFAULT_DPI, TESSERACT_CMD
 
 
 class OCREngine:
@@ -21,21 +22,59 @@ class OCREngine:
             language: Tesseract language code (e.g., 'tur+eng')
         """
         self.language = language
+        self._setup_tesseract()
         self._check_tesseract()
+    
+    def _setup_tesseract(self):
+        """Setup Tesseract path automatically"""
+        # Check if tesseract_cmd is already set
+        if pytesseract.pytesseract.tesseract_cmd and pytesseract.pytesseract.tesseract_cmd != 'tesseract':
+            return
+        
+        # Try common Windows installation paths
+        possible_paths = [
+            r'C:\Program Files\Tesseract-OCR\tesseract.exe',
+            r'C:\Program Files (x86)\Tesseract-OCR\tesseract.exe',
+            r'C:\Tesseract-OCR\tesseract.exe',
+            r'D:\APPS\OCR Tesseract\tesseract.exe',  # Custom D drive installation
+        ]
+        
+        # Check config.py TESSERACT_CMD (from .env)
+        if TESSERACT_CMD:
+            possible_paths.insert(0, TESSERACT_CMD)
+        
+        # Also check environment variable directly
+        env_path = os.getenv('TESSERACT_CMD')
+        if env_path and env_path != TESSERACT_CMD:
+            possible_paths.insert(0, env_path)
+        
+        # Try to find tesseract
+        for path in possible_paths:
+            if Path(path).exists():
+                pytesseract.pytesseract.tesseract_cmd = path
+                logger.info(f"Tesseract path set to: {path}")
+                return
+        
+        # If not found, assume it's in PATH
+        logger.debug("Tesseract path not set manually, assuming it's in system PATH")
     
     def _check_tesseract(self):
         """Check if Tesseract is available"""
         try:
-            pytesseract.get_tesseract_version()
-            logger.info(f"Tesseract OCR available, language: {self.language}")
+            version = pytesseract.get_tesseract_version()
+            logger.info(f"Tesseract OCR available (v{version}), language: {self.language}")
         except Exception as e:
             logger.warning(f"Tesseract OCR not available: {e}")
-            logger.warning("OCR features will not work. Install Tesseract: https://github.com/UB-Mannheim/tesseract/wiki")
+            logger.warning("OCR features will not work. Install Tesseract:")
+            logger.warning("  Windows: https://github.com/UB-Mannheim/tesseract/wiki")
+            logger.warning("  Or run: PowerShell -ExecutionPolicy Bypass -File check_tesseract.ps1")
     
     def extract_text_from_image(
         self,
         image_path: str,
-        language: Optional[str] = None
+        language: Optional[str] = None,
+        psm: Optional[int] = None,
+        preserve_layout: bool = False
     ) -> Dict[str, Any]:
         """
         Extract text from image using OCR
@@ -43,6 +82,11 @@ class OCREngine:
         Args:
             image_path: Path to image file
             language: Optional language override
+            psm: Page Segmentation Mode (0-13, default: 3)
+                 6 = Assume a single uniform block of text
+                 11 = Sparse text. Find as much text as possible
+                 12 = Sparse text with OSD (for tables)
+            preserve_layout: Try to preserve original layout (for tables)
             
         Returns:
             Dictionary with text and metadata
@@ -55,10 +99,20 @@ class OCREngine:
             # Open image
             image = Image.open(image_path)
             
-            # Perform OCR
-            text = pytesseract.image_to_string(image, lang=lang)
+            # Build config string
+            config = ''
+            if psm is not None:
+                config += f'--psm {psm}'
+            if preserve_layout:
+                config += ' -c preserve_interword_spaces=1'
             
-            # Get detailed data
+            # Perform OCR
+            if config:
+                text = pytesseract.image_to_string(image, lang=lang, config=config)
+            else:
+                text = pytesseract.image_to_string(image, lang=lang)
+            
+            # Get detailed data for confidence
             data = pytesseract.image_to_data(image, lang=lang, output_type=pytesseract.Output.DICT)
             
             # Calculate confidence

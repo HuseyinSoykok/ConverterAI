@@ -40,7 +40,8 @@ ALLOWED_EXTENSIONS = {
     'pdf': ['.pdf'],
     'docx': ['.docx', '.doc'],
     'markdown': ['.md', '.markdown'],
-    'html': ['.html', '.htm']
+    'html': ['.html', '.htm'],
+    'image': ['.png', '.jpg', '.jpeg']
 }
 
 # Conversion settings
@@ -48,12 +49,16 @@ DEFAULT_DPI = int(os.getenv('DEFAULT_DPI', 300))
 OCR_LANGUAGE = os.getenv('OCR_LANGUAGE', 'tur+eng')
 ENABLE_AI_QUALITY_CHECK = os.getenv('ENABLE_AI_QUALITY_CHECK', 'True').lower() == 'true'
 
+# Tesseract OCR Path
+TESSERACT_CMD = os.getenv('TESSERACT_CMD', '')
+
 # Supported conversions
 SUPPORTED_CONVERSIONS = {
     'pdf': ['docx', 'markdown', 'html'],
     'docx': ['pdf', 'markdown', 'html'],
     'markdown': ['pdf', 'docx', 'html'],
-    'html': ['pdf', 'docx', 'markdown']
+    'html': ['pdf', 'docx', 'markdown'],
+    'image': ['pdf', 'docx', 'markdown', 'html']
 }
 
 # Quality check thresholds (adjusted for improved scoring system)

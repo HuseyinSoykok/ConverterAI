@@ -11,6 +11,7 @@ ConverterAI, PDF, DOCX, Markdown ve HTML formatları arasında yapay zeka destek
 - 📝 **DOCX** ↔️ PDF / Markdown / HTML
 - 📋 **Markdown** ↔️ PDF / DOCX / HTML
 - 🌐 **HTML** ↔️ PDF / DOCX / Markdown
+- 🖼️ **IMAGE** (PNG/JPG/JPEG) → PDF / DOCX / Markdown / HTML **[YENİ!]**
 
 ### Temel Özellikler
 - ✅ **AI Destekli Kalite Kontrol** - Dönüşüm kalitesini otomatik değerlendirme

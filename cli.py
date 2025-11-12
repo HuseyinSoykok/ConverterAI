@@ -24,6 +24,10 @@ def main():
   # Tek dosya dönüştürme
   python cli.py convert document.pdf --to docx
   
+  # Görsel dönüştürme (YENİ!)
+  python cli.py convert scan.png --to pdf
+  python cli.py convert photo.jpg --to markdown
+  
   # Kalite kontrolü ile
   python cli.py convert document.pdf --to html --quality-check
   
@@ -42,7 +46,7 @@ def main():
     
     # Convert command
     convert_parser = subparsers.add_parser('convert', help='Dosya dönüştür')
-    convert_parser.add_argument('input', help='Girdi dosyası')
+    convert_parser.add_argument('input', help='Girdi dosyası (pdf, docx, markdown, html, png, jpg, jpeg)')
     convert_parser.add_argument('--to', '-t', required=True, dest='format', help='Hedef format (pdf, docx, markdown, html)')
     convert_parser.add_argument('--output', '-o', help='Çıktı dosyası (opsiyonel)')
     convert_parser.add_argument('--quality-check', '-q', action='store_true', help='AI kalite kontrolü yap')

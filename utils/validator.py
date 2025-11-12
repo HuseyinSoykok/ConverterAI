@@ -75,7 +75,10 @@ class Validator:
                 'application/msword': 'docx',
                 'text/markdown': 'markdown',
                 'text/html': 'html',
-                'text/plain': 'markdown'  # Assume .md for plain text
+                'text/plain': 'markdown',  # Assume .md for plain text
+                'image/png': 'image',
+                'image/jpeg': 'image',
+                'image/jpg': 'image'
             }
             
             return mime_map.get(file_type)
