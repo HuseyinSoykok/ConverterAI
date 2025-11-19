@@ -25,6 +25,7 @@ from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT, TA_JUSTIFY
 
 from converters.base import BaseConverter, ConversionResult
 from utils.logger import logger
+from utils.post_processor import apply_post_processing
 
 
 class DOCXConverter(BaseConverter):
@@ -469,9 +470,13 @@ class DOCXConverter(BaseConverter):
                     final_lines.append(line)
                     prev_empty = False
             
+            # Apply post-processing for quality improvements
+            final_content = '\n'.join(final_lines)
+            final_content = apply_post_processing(final_content, 'markdown')
+            
             # Write to file with UTF-8-sig encoding
             with open(output_file, 'w', encoding='utf-8-sig') as f:
-                f.write('\n'.join(final_lines))
+                f.write(final_content)
             
             logger.info(f"Successfully converted DOCX to Markdown: {output_file}")
             return self._create_success_result(
@@ -492,6 +497,9 @@ class DOCXConverter(BaseConverter):
         
         try:
             html_content = self._extract_docx_as_html(input_file)
+            
+            # Apply post-processing for quality improvements
+            html_content = apply_post_processing(html_content, 'html')
             
             # Write to file
             with open(output_file, 'w', encoding='utf-8') as f:

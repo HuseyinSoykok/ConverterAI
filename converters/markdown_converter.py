@@ -23,6 +23,7 @@ from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT, TA_JUSTIFY
 
 from converters.base import BaseConverter, ConversionResult
 from utils.logger import logger
+from utils.post_processor import apply_post_processing
 
 
 class MarkdownConverter(BaseConverter):
@@ -161,6 +162,9 @@ pre {
 {html_body}
 </body>
 </html>"""
+            
+            # Apply post-processing for quality improvements
+            html_content = apply_post_processing(html_content, 'html')
             
             # Write to file with UTF-8-sig encoding
             with open(output_file, 'w', encoding='utf-8-sig') as f:

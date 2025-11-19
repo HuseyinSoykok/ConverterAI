@@ -22,6 +22,7 @@ from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT, TA_JUSTIFY
 
 from converters.base import BaseConverter, ConversionResult
 from utils.logger import logger
+from utils.post_processor import apply_post_processing
 
 
 class HTMLConverter(BaseConverter):
@@ -577,6 +578,9 @@ class HTMLConverter(BaseConverter):
             # Join and ensure proper spacing
             final_content = '\n'.join(cleaned_lines)
             
+            # Apply post-processing for quality improvements
+            final_content = apply_post_processing(final_content, 'markdown')
+            
             # Write to file with UTF-8-sig encoding
             with open(output_file, 'w', encoding='utf-8-sig') as f:
                 f.write(final_content)
@@ -938,22 +942,41 @@ class HTMLConverter(BaseConverter):
                 lines.append("")
             
             elif child.name == 'table':
-                # Table - improved formatting
+                # Table - improved formatting with colspan/rowspan handling
                 if lines and lines[-1] != "":
                     lines.append("")
                 
                 rows = child.find_all('tr')
                 if rows:
-                    for row_idx, row in enumerate(rows):
+                    # Check if table has complex structure (colspan/rowspan)
+                    has_complex_structure = False
+                    for row in rows:
                         cells = row.find_all(['td', 'th'])
-                        # Clean cell text - remove extra whitespace
-                        cell_texts = [' '.join(cell.get_text().split()) for cell in cells]
-                        lines.append("| " + " | ".join(cell_texts) + " |")
-                        
-                        # Add separator after header
-                        if row_idx == 0:
-                            separator = "| " + " | ".join(["---"] * len(cell_texts)) + " |"
-                            lines.append(separator)
+                        for cell in cells:
+                            if cell.get('colspan') or cell.get('rowspan'):
+                                has_complex_structure = True
+                                break
+                        if has_complex_structure:
+                            break
+                    
+                    if has_complex_structure:
+                        # For complex tables, preserve as HTML in markdown
+                        # This is valid Markdown - HTML tables are supported
+                        lines.append("<!-- Complex table with colspan/rowspan preserved as HTML -->")
+                        lines.append(str(child))
+                        lines.append("")
+                    else:
+                        # Simple table - convert to markdown table
+                        for row_idx, row in enumerate(rows):
+                            cells = row.find_all(['td', 'th'])
+                            # Clean cell text - remove extra whitespace
+                            cell_texts = [' '.join(cell.get_text().split()) for cell in cells]
+                            lines.append("| " + " | ".join(cell_texts) + " |")
+                            
+                            # Add separator after header
+                            if row_idx == 0:
+                                separator = "| " + " | ".join(["---"] * len(cell_texts)) + " |"
+                                lines.append(separator)
                 lines.append("")
             
             elif child.name in ['pre', 'code']:
