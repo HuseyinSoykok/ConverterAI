@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Markdown → PDF Editor - ConverterAI</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github.min.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/css/editor.css">
+</head>
+<body>
+  <div class="editor-root">
+    <header class="editor-header">
+      <div class="editor-left-header">
+        <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Ana Sayfa</a>
+        <div class="editor-title">Markdown → PDF (Live)</div>
+      </div>
+      <div class="editor-toolbar">
+        <button id="btnBold" class="toolbar-btn" title="Bold (Ctrl+B)"><i class="fas fa-bold"></i></button>
+        <button id="btnItalic" class="toolbar-btn" title="Italic (Ctrl+I)"><i class="fas fa-italic"></i></button>
+        <button id="btnHeading" class="toolbar-btn" title="Heading"><i class="fas fa-heading"></i></button>
+        <button id="btnLink" class="toolbar-btn" title="Link"><i class="fas fa-link"></i></button>
+        <button id="btnCode" class="toolbar-btn" title="Code"><i class="fas fa-code"></i></button>
+        <button id="btnList" class="toolbar-btn" title="List"><i class="fas fa-list"></i></button>
+        <span class="toolbar-divider"></span>
+        <button id="openFile" class="toolbar-btn" title="Open File"><i class="fas fa-folder-open"></i></button>
+        <button id="saveFile" class="toolbar-btn" title="Save .md"><i class="fas fa-save"></i></button>
+      </div>
+      <div class="editor-actions">
+        <button id="downloadPdf" class="btn primary"><i class="fas fa-file-pdf"></i> Download PDF</button>
+      </div>
+    </header>
+
+    <main class="editor-main">
+      <section class="editor-column editor-column-left">
+        <textarea id="mdInput" class="md-input" placeholder="Write Markdown here..."></textarea>
+      </section>
+
+      <section class="editor-column editor-column-right">
+        <div class="preview-wrapper">
+          <div id="previewContainer" class="a4-sheet">
+            <div id="previewContent" class="preview-content"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Hidden file input -->
+  <input type="file" id="fileInputHidden" accept=".md,.markdown,.txt" style="display:none">
+
+  <!-- Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+  <script src="/static/js/markdown_editor.js"></script>
+</body>
+</html>
+</body>
+</html>

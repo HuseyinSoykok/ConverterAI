@@ -13,10 +13,10 @@ let state = {
 
 // Format icons and labels
 const formatInfo = {
-    'pdf': { icon: 'fa-file-pdf', label: 'PDF', color: '#ef4444' },
-    'docx': { icon: 'fa-file-word', label: 'DOCX', color: '#2563eb' },
-    'markdown': { icon: 'fa-markdown', label: 'Markdown', color: '#6b7280' },
-    'html': { icon: 'fa-html5', label: 'HTML', color: '#f97316' }
+    'pdf': { icon: 'fa-solid fa-file-pdf', label: 'PDF', color: '#ef4444' },
+    'docx': { icon: 'fa-solid fa-file-word', label: 'DOCX', color: '#2563eb' },
+    'markdown': { icon: 'fa-brands fa-markdown', label: 'Markdown', color: '#6b7280' },
+    'html': { icon: 'fa-brands fa-html5', label: 'HTML', color: '#f97316' }
 };
 
 // DOM Elements
@@ -52,9 +52,21 @@ const retryBtn = document.getElementById('retryBtn');
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
+    ensureFontAwesome();
     loadSupportedConversions();
     initEventListeners();
 });
+
+// Ensure Font Awesome is loaded
+function ensureFontAwesome() {
+    if (!document.querySelector('link[href*="font-awesome"]') && !document.querySelector('link[href*="fontawesome"]')) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+        link.crossOrigin = 'anonymous';
+        document.head.appendChild(link);
+    }
+}
 
 // Event Listeners
 function initEventListeners() {

@@ -46,6 +46,12 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/editor')
+def editor():
+    """Render the split-screen Markdown editor"""
+    return render_template('editor.html')
+
+
 @app.route('/api/supported-conversions', methods=['GET'])
 def get_supported_conversions():
     """Get list of supported conversions"""

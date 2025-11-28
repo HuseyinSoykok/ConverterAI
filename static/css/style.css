@@ -43,6 +43,32 @@ body {
     box-shadow: var(--shadow);
 }
 
+.header-nav {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin: 15px 0 5px;
+}
+
+.nav-link {
+    color: rgba(255,255,255,0.9);
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: all 0.3s;
+    font-size: 14px;
+}
+
+.nav-link:hover {
+    background: rgba(255,255,255,0.15);
+    color: white;
+}
+
+.nav-link.active {
+    background: rgba(255,255,255,0.2);
+    color: white;
+}
+
 .logo {
     display: flex;
     align-items: center;
