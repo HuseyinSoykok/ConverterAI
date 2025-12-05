@@ -4,7 +4,14 @@ File validation utilities
 import os
 from pathlib import Path
 from typing import Tuple, Optional
-import magic
+
+# Try to import magic, but make it optional
+try:
+    import magic
+    HAS_MAGIC = True
+except ImportError:
+    HAS_MAGIC = False
+
 from config import ALLOWED_EXTENSIONS, MAX_FILE_SIZE_BYTES, SUPPORTED_CONVERSIONS
 from utils.logger import logger
 
@@ -65,26 +72,29 @@ class Validator:
             if extension in extensions:
                 return format_name
         
-        # Try to detect by content using python-magic
-        try:
-            file_type = magic.from_file(file_path, mime=True)
-            
-            mime_map = {
-                'application/pdf': 'pdf',
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
-                'application/msword': 'docx',
-                'text/markdown': 'markdown',
-                'text/html': 'html',
-                'text/plain': 'markdown',  # Assume .md for plain text
-                'image/png': 'image',
-                'image/jpeg': 'image',
-                'image/jpg': 'image'
-            }
-            
-            return mime_map.get(file_type)
-        except Exception as e:
-            logger.warning(f"Could not detect file type: {e}")
-            return None
+        # Try to detect by content using python-magic (if available)
+        if HAS_MAGIC:
+            try:
+                file_type = magic.from_file(file_path, mime=True)
+                
+                mime_map = {
+                    'application/pdf': 'pdf',
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
+                    'application/msword': 'docx',
+                    'text/markdown': 'markdown',
+                    'text/html': 'html',
+                    'text/plain': 'markdown',  # Assume .md for plain text
+                    'image/png': 'image',
+                    'image/jpeg': 'image',
+                    'image/jpg': 'image'
+                }
+                
+                return mime_map.get(file_type)
+            except Exception as e:
+                logger.warning(f"Could not detect file type: {e}")
+                return None
+        
+        return None
     
     @staticmethod
     def validate_conversion(input_format: str, output_format: str) -> Tuple[bool, Optional[str]]:

@@ -24,9 +24,17 @@ def main():
   # Tek dosya dönüştürme
   python cli.py convert document.pdf --to docx
   
-  # Görsel dönüştürme (YENİ!)
+  # Görsel dönüştürme
   python cli.py convert scan.png --to pdf
   python cli.py convert photo.jpg --to markdown
+  
+  # OCR modu ile PDF dönüştürme (sunum PDF'leri için önerilen)
+  python cli.py convert presentation.pdf --to markdown --ocr
+  python cli.py convert presentation.pdf --to docx --ocr --ocr-lang tur
+  
+  # LLM ile gelişmiş dönüştürme (en yüksek kalite!)
+  python cli.py convert math_doc.pdf --to markdown --ocr --llm
+  python cli.py convert math_doc.pdf --to markdown --ocr --llm --llm-provider ollama
   
   # Kalite kontrolü ile
   python cli.py convert document.pdf --to html --quality-check
@@ -51,6 +59,17 @@ def main():
     convert_parser.add_argument('--output', '-o', help='Çıktı dosyası (opsiyonel)')
     convert_parser.add_argument('--quality-check', '-q', action='store_true', help='AI kalite kontrolü yap')
     
+    # OCR options
+    convert_parser.add_argument('--ocr', action='store_true', help='OCR modu kullan (sunum PDF\'leri için önerilen)')
+    convert_parser.add_argument('--ocr-lang', default='eng', help='OCR dili (örn: eng, tur, deu). Varsayılan: eng')
+    convert_parser.add_argument('--ocr-dpi', type=int, default=2, help='OCR çözünürlük çarpanı (1-4). Varsayılan: 2')
+    
+    # LLM options
+    convert_parser.add_argument('--llm', action='store_true', help='LLM post-processing kullan (en yüksek kalite)')
+    convert_parser.add_argument('--llm-provider', default='auto', 
+                               choices=['auto', 'ollama', 'huggingface', 'gemini'],
+                               help='LLM sağlayıcı: auto, ollama (yerel), huggingface, gemini')
+    
     # Batch command
     batch_parser = subparsers.add_parser('batch', help='Toplu dönüştürme')
     batch_parser.add_argument('--input-folder', '-i', required=True, help='Girdi klasörü')
@@ -61,6 +80,9 @@ def main():
     
     # List formats command
     list_parser = subparsers.add_parser('list-formats', help='Desteklenen formatları listele')
+    
+    # Check LLM providers command
+    llm_parser = subparsers.add_parser('check-llm', help='LLM sağlayıcılarının durumunu kontrol et')
     
     args = parser.parse_args()
     
@@ -75,6 +97,8 @@ def main():
         batch_convert(args)
     elif args.command == 'list-formats':
         list_formats()
+    elif args.command == 'check-llm':
+        check_llm_providers()
 
 
 def convert_file(args):
@@ -89,12 +113,36 @@ def convert_file(args):
     # Create converter
     converter = UniversalConverter()
     
+    # Prepare options
+    options = {}
+    
+    # OCR options
+    if hasattr(args, 'ocr') and args.ocr:
+        options['use_ocr'] = True
+        options['ocr_lang'] = getattr(args, 'ocr_lang', 'eng')
+        options['ocr_dpi'] = getattr(args, 'ocr_dpi', 2)
+        logger.info(f"OCR modu aktif - Dil: {options['ocr_lang']}, DPI: {options['ocr_dpi']}x")
+    
+    # LLM options
+    if hasattr(args, 'llm') and args.llm:
+        options['use_llm'] = True
+        options['llm_provider'] = getattr(args, 'llm_provider', 'auto')
+        logger.info(f"LLM post-processing aktif - Provider: {options['llm_provider']}")
+        
+        # Check for API keys in environment
+        import os
+        if os.environ.get('HUGGINGFACE_API_KEY'):
+            options['huggingface_api_key'] = os.environ['HUGGINGFACE_API_KEY']
+        if os.environ.get('GOOGLE_API_KEY'):
+            options['google_api_key'] = os.environ['GOOGLE_API_KEY']
+    
     # Convert
     result = converter.convert(
-        args.input,
-        args.format,
-        args.output,
-        quality_check=args.quality_check
+        input_file=args.input,
+        output_format=args.format,
+        output_file=args.output,
+        quality_check=args.quality_check,
+        **options
     )
     
     # Display result
@@ -176,6 +224,53 @@ def list_formats():
         for output_format in output_formats:
             print(f"  → {output_format.upper()}")
         print()
+
+
+def check_llm_providers():
+    """Check available LLM providers"""
+    print("\n🤖 LLM Sağlayıcı Durumu\n")
+    print("=" * 50)
+    
+    try:
+        from ai.llm_post_processor import LLMPostProcessor
+        
+        processor = LLMPostProcessor(provider='auto')
+        info = processor.get_provider_info()
+        
+        for name, status in info.items():
+            available = status['available']
+            active = status['active']
+            
+            if available:
+                icon = "✅" if active else "🟢"
+                status_text = "(AKTİF)" if active else "(Kullanılabilir)"
+            else:
+                icon = "❌"
+                status_text = "(Kullanılamıyor)"
+            
+            print(f"  {icon} {name.upper():15} {status_text}")
+        
+        print("\n" + "=" * 50)
+        print("\n📋 Kurulum Talimatları:\n")
+        
+        print("  🔹 OLLAMA (Yerel, Ücretsiz - ÖNERİLEN)")
+        print("     1. https://ollama.ai adresinden indir")
+        print("     2. 'ollama pull llama3.2' komutu ile model indir")
+        print("     3. Ollama otomatik olarak algılanacak\n")
+        
+        print("  🔹 HUGGINGFACE (Bulut, Ücretsiz Tier)")
+        print("     1. https://huggingface.co/settings/tokens adresinden token al")
+        print("     2. HUGGINGFACE_API_KEY ortam değişkenini ayarla")
+        print("     3. Windows: set HUGGINGFACE_API_KEY=hf_xxx\n")
+        
+        print("  🔹 GOOGLE GEMINI (Bulut, Ücretsiz Tier)")
+        print("     1. https://makersuite.google.com/app/apikey adresinden API key al")
+        print("     2. GOOGLE_API_KEY ortam değişkenini ayarla")
+        print("     3. pip install google-generativeai\n")
+        
+    except ImportError as e:
+        print(f"  ⚠️  LLM modülü yüklenemedi: {e}")
+        print("     Gerekli paketleri yükleyin: pip install requests")
 
 
 if __name__ == '__main__':

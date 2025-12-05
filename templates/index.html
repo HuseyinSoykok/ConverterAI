@@ -68,6 +68,26 @@
                         <input type="checkbox" id="qualityCheck">
                         <span>AI Kalite Kontrolü (önerilir)</span>
                     </label>
+                    
+                    <label class="checkbox-label" id="ocrOption" style="display: none;">
+                        <input type="checkbox" id="useOcr">
+                        <span><i class="fas fa-eye"></i> OCR Kullan (Taranmış PDF'ler için)</span>
+                    </label>
+                    
+                    <label class="checkbox-label" id="llmOption" style="display: none;">
+                        <input type="checkbox" id="useLlm">
+                        <span><i class="fas fa-robot"></i> LLM İyileştirme (Matematik/LaTeX için)</span>
+                    </label>
+                    
+                    <div class="llm-provider-select" id="llmProviderSelect" style="display: none;">
+                        <label for="llmProvider">LLM Sağlayıcı:</label>
+                        <select id="llmProvider">
+                            <option value="auto">Otomatik Seç</option>
+                            <option value="ollama">Ollama (Yerel)</option>
+                            <option value="gemini">Google Gemini</option>
+                            <option value="huggingface">HuggingFace</option>
+                        </select>
+                    </div>
                 </div>
 
                 <button class="btn btn-primary" id="convertBtn">

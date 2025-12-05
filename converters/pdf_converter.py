@@ -33,9 +33,127 @@ class PDFConverter(BaseConverter):
                 .replace('"', '&quot;')
                 .replace("'", '&#39;'))
     
+    def _clean_text_for_xml(self, text: str) -> str:
+        """Remove XML-incompatible characters (control characters, NULL bytes)"""
+        if not text:
+            return ''
+        import re
+        # Remove control characters except newline, tab, carriage return
+        cleaned = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', '', text)
+        return cleaned
+    
+    def _fix_word_spacing(self, text: str) -> str:
+        """Fix missing spaces between words (common in PDF extraction from presentations)"""
+        import re
+        if not text:
+            return ''
+        
+        # First pass: Fix obvious concatenations
+        # Add space between lowercase and uppercase (camelCase)
+        text = re.sub(r'([a-z])([A-Z])', r'\1 \2', text)
+        
+        # Add space after punctuation if followed by letter (not decimal)
+        text = re.sub(r'([.])([A-Z])', r'\1 \2', text)
+        text = re.sub(r'([,:;!?])([A-Za-z])', r'\1 \2', text)
+        
+        # Add space after closing parenthesis/bracket if followed by letter
+        text = re.sub(r'([\)\]])([A-Za-z])', r'\1 \2', text)
+        
+        # Add space before opening parenthesis/bracket if preceded by letter
+        text = re.sub(r'([a-zA-Z])([\(\[])', r'\1 \2', text)
+        
+        # Second pass: Fix common concatenated words
+        # These patterns are common in PDF extraction errors
+        word_boundaries = [
+            (r'([a-z])(the)([A-Z])', r'\1 \2 \3'),
+            (r'([a-z])(and)([a-z])', r'\1 \2 \3'),
+            (r'([a-z])(for)([a-z])', r'\1 \2 \3'),
+            (r'([a-z])(with)([a-z])', r'\1 \2 \3'),
+            (r'([a-z])(from)([a-z])', r'\1 \2 \3'),
+            (r'([a-z])(that)([a-z])', r'\1 \2 \3'),
+            (r'([a-z])(this)([a-z])', r'\1 \2 \3'),
+            (r'([a-z])(such)([a-z])', r'\1 \2 \3'),
+            (r'([a-z])(given)([a-z])', r'\1 \2 \3'),
+            (r'([a-z])(find)([a-z])', r'\1 \2 \3'),
+            (r'([a-z])(using)([a-z])', r'\1 \2 \3'),
+            (r'([a-z])(where)([a-z])', r'\1 \2 \3'),
+            (r'([a-z])(which)([a-z])', r'\1 \2 \3'),
+            (r'([a-z])(each)([a-z])', r'\1 \2 \3'),
+            (r'([a-z])(also)([a-z])', r'\1 \2 \3'),
+            (r'([a-z])(into)([a-z])', r'\1 \2 \3'),
+            (r'([a-z])(over)([a-z])', r'\1 \2 \3'),
+            (r'([a-z])(then)([a-z])', r'\1 \2 \3'),
+            (r'([a-z])(when)([a-z])', r'\1 \2 \3'),
+            (r'on([A-Z])', r'on \1'),  # "onA" -> "on A"
+            (r'in([A-Z])', r'in \1'),  # "inA" -> "in A"
+            (r'of([A-Z])', r'of \1'),  # "ofA" -> "of A"
+            (r'to([A-Z])', r'to \1'),  # "toA" -> "to A"
+            (r'is([A-Z])', r'is \1'),  # "isA" -> "is A"
+            (r'by([A-Z])', r'by \1'),  # "byA" -> "by A"
+            (r'as([A-Z])', r'as \1'),  # "asA" -> "as A"
+        ]
+        
+        for pattern, replacement in word_boundaries:
+            text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
+        
+        # Clean up multiple spaces
+        text = re.sub(r' +', ' ', text)
+        
+        return text
+    
+    def _fix_concatenated_text(self, text: str) -> str:
+        """Advanced fix for heavily concatenated text (pdfplumber extraction issues)"""
+        import re
+        if not text:
+            return ''
+        
+        # Common English word patterns that get concatenated
+        common_words = [
+            'the', 'and', 'for', 'with', 'from', 'that', 'this', 'such', 
+            'given', 'find', 'using', 'where', 'which', 'each', 'also',
+            'into', 'over', 'then', 'when', 'have', 'been', 'will', 'would',
+            'could', 'should', 'must', 'function', 'domain', 'source',
+            'equation', 'boundary', 'condition', 'method', 'element',
+            'finite', 'described', 'strong', 'form', 'unknown', 'potential',
+            'temperature', 'heat', 'problem', 'requires', 'twice',
+            'differentiate', 'restrictive', 'difficult', 'computationally',
+            'notation', 'inner', 'product', 'goal', 'on', 'is', 'by', 'to',
+            'an', 'or', 'be', 'as', 'at', 'if', 'of', 'in', 'it'
+        ]
+        
+        for word in common_words:
+            # Add space before word if preceded by lowercase letter
+            pattern = rf'([a-z])({word})([a-z])'
+            text = re.sub(pattern, rf'\1 \2 \3', text, flags=re.IGNORECASE)
+        
+        # Fix "e.g.," and "i.e.," patterns
+        text = re.sub(r'(\w)(e\.g\.,)', r'\1 \2', text)
+        text = re.sub(r'(\w)(i\.e\.,)', r'\1 \2', text)
+        
+        # Fix Greek letters
+        text = re.sub(r'([ΩΔ∂∇])([a-zA-Z])', r'\1 \2', text)
+        text = re.sub(r'([a-zA-Z])([ΩΔ∂∇])', r'\1 \2', text)
+        
+        # Clean up multiple spaces
+        text = re.sub(r' +', ' ', text)
+        
+        return text
+    
     def convert(self, input_file: str, output_file: str, **options) -> ConversionResult:
-        """Route to appropriate conversion method"""
+        """Route to appropriate conversion method
+        
+        Options:
+            use_ocr (bool): Use OCR for text extraction (better for presentations)
+            enhance_math (bool): Use AI-enhanced math processing (default: True with OCR)
+            use_llm (bool): Use LLM for post-processing (requires API key or Ollama)
+            llm_provider (str): LLM provider - 'auto', 'ollama', 'huggingface', 'gemini'
+            ocr_lang (str): OCR language code (default: 'eng')
+            ocr_dpi (int): OCR resolution DPI multiplier (default: 2)
+        """
         output_format = Path(output_file).suffix.lower().lstrip('.')
+        use_ocr = options.get('use_ocr', False)
+        enhance_math = options.get('enhance_math', True)  # Default to True when OCR is used
+        use_llm = options.get('use_llm', False)
         
         start_time = time.time()
         
@@ -46,11 +164,25 @@ class PDFConverter(BaseConverter):
         
         try:
             if output_format in ['docx', 'doc']:
-                result = self._pdf_to_docx(input_file, output_file, **options)
+                if use_ocr:
+                    result = self._pdf_to_docx_ocr(input_file, output_file, **options)
+                else:
+                    result = self._pdf_to_docx(input_file, output_file, **options)
             elif output_format in ['md', 'markdown']:
-                result = self._pdf_to_markdown(input_file, output_file, **options)
+                if use_ocr:
+                    if use_llm:
+                        result = self._pdf_to_markdown_llm(input_file, output_file, **options)
+                    elif enhance_math:
+                        result = self._pdf_to_markdown_math_ocr(input_file, output_file, **options)
+                    else:
+                        result = self._pdf_to_markdown_ocr(input_file, output_file, **options)
+                else:
+                    result = self._pdf_to_markdown(input_file, output_file, **options)
             elif output_format in ['html', 'htm']:
-                result = self._pdf_to_html(input_file, output_file, **options)
+                if use_ocr:
+                    result = self._pdf_to_html_ocr(input_file, output_file, **options)
+                else:
+                    result = self._pdf_to_html(input_file, output_file, **options)
             else:
                 return self._create_error_result(
                     input_file, 
@@ -125,9 +257,14 @@ class PDFConverter(BaseConverter):
                             for span_idx, span in enumerate(line_spans):
                                 span_text = span.get("text", "")
                                 
-                                # Preserve spaces between spans
-                                if span_idx > 0 and span_text and not span_text[0].isspace():
-                                    line_text += " "
+                                # Smart span joining - preserve leading spaces in span
+                                if span_idx > 0:
+                                    # If current span starts with space, keep it
+                                    # If not, add space between spans (unless previous ended with hyphen)
+                                    if not span_text.startswith(' ') and line_text and not line_text.endswith('-'):
+                                        # Check if we need a space
+                                        if line_text[-1:].isalnum() and span_text[:1].isalnum():
+                                            line_text += " "
                                 
                                 line_text += span_text
                                 
@@ -148,6 +285,10 @@ class PDFConverter(BaseConverter):
                             full_text = " ".join(block_text)
                             
                             if full_text.strip():
+                                # Clean text for XML compatibility and fix spacing
+                                full_text = self._clean_text_for_xml(full_text)
+                                full_text = self._fix_word_spacing(full_text)
+                                
                                 # Detect if it's a heading based on font size and properties
                                 para = doc.add_paragraph()
                                 
@@ -189,6 +330,7 @@ class PDFConverter(BaseConverter):
                 if page_num < len(pdf_document) - 1:
                     doc.add_page_break()
             
+            num_pages = len(pdf_document)
             pdf_document.close()
             
             # Save document
@@ -201,7 +343,7 @@ class PDFConverter(BaseConverter):
                 'pdf', 
                 'docx',
                 warnings=warnings,
-                metadata={'pages': len(pdf_document)}
+                metadata={'pages': num_pages}
             )
             
         except Exception as e:
@@ -413,6 +555,10 @@ class PDFConverter(BaseConverter):
             
             # Clean up the final content
             final_content = ''.join(markdown_content)
+            
+            # Fix word spacing issues from PDF extraction (use advanced fix)
+            final_content = self._fix_concatenated_text(final_content)
+            final_content = self._fix_word_spacing(final_content)
             
             # Remove excessive blank lines (more than 2)
             final_content = re.sub(r'\n{4,}', '\n\n\n', final_content)
@@ -633,6 +779,10 @@ class PDFConverter(BaseConverter):
                     # Extract text with layout preservation
                     text = page.extract_text()
                     if text:
+                        # Fix word spacing issues (use advanced fix for concatenated text)
+                        text = self._fix_concatenated_text(text)
+                        text = self._fix_word_spacing(text)
+                        
                         # Split into lines for better processing
                         lines = text.split('\n')
                         current_paragraph = []
@@ -743,4 +893,605 @@ class PDFConverter(BaseConverter):
             
         except Exception as e:
             logger.error(f"PDF to HTML conversion failed: {e}")
+            raise
+
+    # ==================== OCR-BASED CONVERSION METHODS ====================
+    
+    def _setup_tesseract(self):
+        """Setup Tesseract OCR path"""
+        import pytesseract
+        import os
+        
+        # Common Tesseract installation paths
+        tesseract_paths = [
+            r'D:\APPS\OCR Tesseract\tesseract.exe',
+            r'C:\Program Files\Tesseract-OCR\tesseract.exe',
+            r'C:\Program Files (x86)\Tesseract-OCR\tesseract.exe',
+            r'/usr/bin/tesseract',
+            r'/usr/local/bin/tesseract',
+        ]
+        
+        for path in tesseract_paths:
+            if os.path.exists(path):
+                pytesseract.pytesseract.tesseract_cmd = path
+                return True
+        
+        # Try system PATH
+        try:
+            import subprocess
+            subprocess.run(['tesseract', '--version'], capture_output=True, check=True)
+            return True
+        except:
+            pass
+        
+        return False
+    
+    def _pdf_page_to_image(self, page, dpi_multiplier: int = 2) -> Image.Image:
+        """Convert a PyMuPDF page to PIL Image"""
+        # Create high-resolution pixmap
+        matrix = fitz.Matrix(dpi_multiplier, dpi_multiplier)
+        pix = page.get_pixmap(matrix=matrix)
+        
+        # Convert to PIL Image
+        img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+        return img
+    
+    def _ocr_image(self, img: Image.Image, lang: str = 'eng') -> str:
+        """Perform OCR on an image"""
+        import pytesseract
+        
+        # Configure Tesseract for better results
+        custom_config = r'--oem 3 --psm 6'
+        
+        text = pytesseract.image_to_string(img, lang=lang, config=custom_config)
+        return text
+    
+    def _pdf_to_markdown_ocr(self, input_file: str, output_file: str, **options) -> ConversionResult:
+        """Convert PDF to Markdown using OCR (better for presentations and scanned documents)"""
+        logger.info(f"Converting PDF to Markdown (OCR mode): {input_file} -> {output_file}")
+        
+        warnings = []
+        ocr_lang = options.get('ocr_lang', 'eng')
+        dpi_multiplier = options.get('ocr_dpi', 2)
+        
+        # Setup Tesseract
+        if not self._setup_tesseract():
+            warnings.append("Tesseract not found, OCR may not work properly")
+        
+        try:
+            import pytesseract
+            doc = fitz.open(input_file)
+            markdown_content = []
+            
+            # Get document title from metadata or filename
+            metadata = doc.metadata
+            title = metadata.get('title', '') if metadata else ''
+            if not title:
+                title = Path(input_file).stem.replace('_', ' ')
+            
+            markdown_content.append(f"# {title}\n\n")
+            
+            for page_num in range(len(doc)):
+                page = doc[page_num]
+                
+                # Convert page to image
+                img = self._pdf_page_to_image(page, dpi_multiplier)
+                
+                # OCR the image
+                try:
+                    text = self._ocr_image(img, ocr_lang)
+                    
+                    if text.strip():
+                        # Add page header for multi-page documents
+                        if len(doc) > 1:
+                            markdown_content.append(f"---\n\n## Page {page_num + 1}\n\n")
+                        
+                        # Clean up OCR text
+                        cleaned_text = self._clean_ocr_text(text)
+                        markdown_content.append(cleaned_text)
+                        markdown_content.append("\n\n")
+                    else:
+                        warnings.append(f"Page {page_num + 1}: No text detected via OCR")
+                        
+                except Exception as e:
+                    warnings.append(f"Page {page_num + 1}: OCR failed - {e}")
+            
+            num_pages = len(doc)
+            doc.close()
+            
+            # Write to file
+            final_content = ''.join(markdown_content)
+            with open(output_file, 'w', encoding='utf-8') as f:
+                f.write(final_content)
+            
+            logger.info(f"Successfully converted PDF to Markdown (OCR): {output_file}")
+            return self._create_success_result(
+                input_file,
+                output_file,
+                'pdf',
+                'markdown',
+                warnings=warnings,
+                metadata={'pages': num_pages, 'method': 'ocr'}
+            )
+            
+        except ImportError:
+            raise Exception("pytesseract not installed. Install with: pip install pytesseract")
+        except Exception as e:
+            logger.error(f"PDF to Markdown (OCR) conversion failed: {e}")
+            raise
+    
+    def _clean_ocr_text(self, text: str) -> str:
+        """Clean up OCR output text"""
+        if not text:
+            return ''
+        
+        # Remove multiple blank lines
+        text = re.sub(r'\n{3,}', '\n\n', text)
+        
+        # Fix common OCR errors
+        text = text.replace('|', 'I')  # Common OCR confusion
+        
+        # Clean up line breaks within paragraphs (keep paragraph breaks)
+        lines = text.split('\n')
+        cleaned_lines = []
+        current_paragraph = []
+        
+        for line in lines:
+            stripped = line.strip()
+            if not stripped:
+                # Empty line indicates paragraph break
+                if current_paragraph:
+                    cleaned_lines.append(' '.join(current_paragraph))
+                    current_paragraph = []
+                cleaned_lines.append('')
+            else:
+                current_paragraph.append(stripped)
+        
+        if current_paragraph:
+            cleaned_lines.append(' '.join(current_paragraph))
+        
+        return '\n\n'.join([l for l in cleaned_lines if l or (cleaned_lines.index(l) > 0 and cleaned_lines[cleaned_lines.index(l)-1])])
+    
+    def _pdf_to_html_ocr(self, input_file: str, output_file: str, **options) -> ConversionResult:
+        """Convert PDF to HTML using OCR"""
+        logger.info(f"Converting PDF to HTML (OCR mode): {input_file} -> {output_file}")
+        
+        warnings = []
+        ocr_lang = options.get('ocr_lang', 'eng')
+        dpi_multiplier = options.get('ocr_dpi', 2)
+        
+        # Setup Tesseract
+        if not self._setup_tesseract():
+            warnings.append("Tesseract not found, OCR may not work properly")
+        
+        try:
+            import pytesseract
+            doc = fitz.open(input_file)
+            
+            # Get document title
+            metadata = doc.metadata
+            title = metadata.get('title', '') if metadata else ''
+            if not title:
+                title = Path(input_file).stem.replace('_', ' ')
+            
+            html_parts = [
+                '<!DOCTYPE html>',
+                '<html lang="en">',
+                '<head>',
+                '<meta charset="UTF-8">',
+                '<meta name="viewport" content="width=device-width, initial-scale=1.0">',
+                f'<title>{self._escape_html(title)}</title>',
+                '<style>',
+                'body { font-family: Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; }',
+                '.page { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid #ddd; }',
+                '.page-header { color: #666; font-size: 14px; margin-bottom: 20px; }',
+                'p { line-height: 1.6; margin-bottom: 1em; }',
+                '</style>',
+                '</head>',
+                '<body>',
+                f'<h1>{self._escape_html(title)}</h1>',
+            ]
+            
+            for page_num in range(len(doc)):
+                page = doc[page_num]
+                
+                # Convert page to image
+                img = self._pdf_page_to_image(page, dpi_multiplier)
+                
+                # OCR the image
+                try:
+                    text = self._ocr_image(img, ocr_lang)
+                    
+                    html_parts.append(f'<div class="page">')
+                    if len(doc) > 1:
+                        html_parts.append(f'<div class="page-header">Page {page_num + 1}</div>')
+                    
+                    if text.strip():
+                        # Convert text to HTML paragraphs
+                        paragraphs = text.strip().split('\n\n')
+                        for para in paragraphs:
+                            if para.strip():
+                                clean_para = ' '.join(para.split())
+                                html_parts.append(f'<p>{self._escape_html(clean_para)}</p>')
+                    else:
+                        warnings.append(f"Page {page_num + 1}: No text detected via OCR")
+                    
+                    html_parts.append('</div>')
+                    
+                except Exception as e:
+                    warnings.append(f"Page {page_num + 1}: OCR failed - {e}")
+            
+            num_pages = len(doc)
+            doc.close()
+            
+            html_parts.extend(['</body>', '</html>'])
+            
+            # Write to file
+            final_html = '\n'.join(html_parts)
+            with open(output_file, 'w', encoding='utf-8') as f:
+                f.write(final_html)
+            
+            logger.info(f"Successfully converted PDF to HTML (OCR): {output_file}")
+            return self._create_success_result(
+                input_file,
+                output_file,
+                'pdf',
+                'html',
+                warnings=warnings,
+                metadata={'pages': num_pages, 'method': 'ocr'}
+            )
+            
+        except ImportError:
+            raise Exception("pytesseract not installed. Install with: pip install pytesseract")
+        except Exception as e:
+            logger.error(f"PDF to HTML (OCR) conversion failed: {e}")
+            raise
+    
+    def _pdf_to_docx_ocr(self, input_file: str, output_file: str, **options) -> ConversionResult:
+        """Convert PDF to DOCX using OCR"""
+        logger.info(f"Converting PDF to DOCX (OCR mode): {input_file} -> {output_file}")
+        
+        warnings = []
+        ocr_lang = options.get('ocr_lang', 'eng')
+        dpi_multiplier = options.get('ocr_dpi', 2)
+        
+        # Setup Tesseract
+        if not self._setup_tesseract():
+            warnings.append("Tesseract not found, OCR may not work properly")
+        
+        try:
+            import pytesseract
+            doc = Document()
+            pdf_doc = fitz.open(input_file)
+            
+            # Get document title
+            metadata = pdf_doc.metadata
+            title = metadata.get('title', '') if metadata else ''
+            if not title:
+                title = Path(input_file).stem.replace('_', ' ')
+            
+            # Add title
+            title_para = doc.add_heading(title, level=0)
+            
+            for page_num in range(len(pdf_doc)):
+                page = pdf_doc[page_num]
+                
+                # Convert page to image
+                img = self._pdf_page_to_image(page, dpi_multiplier)
+                
+                # OCR the image
+                try:
+                    text = self._ocr_image(img, ocr_lang)
+                    
+                    if len(pdf_doc) > 1:
+                        doc.add_heading(f'Page {page_num + 1}', level=1)
+                    
+                    if text.strip():
+                        # Add text paragraphs
+                        paragraphs = text.strip().split('\n\n')
+                        for para in paragraphs:
+                            if para.strip():
+                                clean_para = ' '.join(para.split())
+                                clean_para = self._clean_text_for_xml(clean_para)
+                                doc.add_paragraph(clean_para)
+                    else:
+                        warnings.append(f"Page {page_num + 1}: No text detected via OCR")
+                    
+                    # Add page break except for last page
+                    if page_num < len(pdf_doc) - 1:
+                        doc.add_page_break()
+                        
+                except Exception as e:
+                    warnings.append(f"Page {page_num + 1}: OCR failed - {e}")
+            
+            num_pages = len(pdf_doc)
+            pdf_doc.close()
+            
+            # Save document
+            doc.save(output_file)
+            
+            logger.info(f"Successfully converted PDF to DOCX (OCR): {output_file}")
+            return self._create_success_result(
+                input_file,
+                output_file,
+                'pdf',
+                'docx',
+                warnings=warnings,
+                metadata={'pages': num_pages, 'method': 'ocr'}
+            )
+            
+        except ImportError:
+            raise Exception("pytesseract not installed. Install with: pip install pytesseract")
+        except Exception as e:
+            logger.error(f"PDF to DOCX (OCR) conversion failed: {e}")
+            raise
+    
+    def detect_if_ocr_needed(self, input_file: str) -> dict:
+        """Analyze PDF and suggest whether OCR should be used
+        
+        Returns:
+            dict with 'recommended': bool, 'reason': str, 'confidence': float
+        """
+        try:
+            doc = fitz.open(input_file)
+            
+            # Check 1: Page aspect ratio (presentation = 16:9 or 4:3)
+            if len(doc) > 0:
+                page = doc[0]
+                rect = page.rect
+                aspect_ratio = rect.width / rect.height if rect.height > 0 else 1
+                
+                is_presentation = 1.3 < aspect_ratio < 2.0  # 4:3 = 1.33, 16:9 = 1.78
+                
+                # Check 2: Sample text extraction quality
+                sample_text = ""
+                for i in range(min(3, len(doc))):
+                    sample_text += doc[i].get_text()
+                
+                # Check for concatenated words (no spaces between capitals)
+                concatenation_pattern = re.compile(r'[a-z][A-Z]')
+                concatenation_count = len(concatenation_pattern.findall(sample_text))
+                
+                # Check for very long words (likely concatenated)
+                words = sample_text.split()
+                long_words = [w for w in words if len(w) > 25]
+                
+                doc.close()
+                
+                # Decision logic
+                if is_presentation and (concatenation_count > 10 or len(long_words) > 5):
+                    return {
+                        'recommended': True,
+                        'reason': 'Presentation format with text extraction issues detected',
+                        'confidence': 0.9
+                    }
+                elif concatenation_count > 20 or len(long_words) > 10:
+                    return {
+                        'recommended': True,
+                        'reason': 'Significant text extraction issues detected',
+                        'confidence': 0.8
+                    }
+                elif is_presentation:
+                    return {
+                        'recommended': True,
+                        'reason': 'Presentation format detected (OCR often produces better results)',
+                        'confidence': 0.6
+                    }
+                else:
+                    return {
+                        'recommended': False,
+                        'reason': 'Standard document, text extraction should work well',
+                        'confidence': 0.7
+                    }
+                    
+        except Exception as e:
+            return {
+                'recommended': False,
+                'reason': f'Could not analyze PDF: {e}',
+                'confidence': 0.0
+            }
+    
+    def _pdf_to_markdown_math_ocr(self, input_file: str, output_file: str, **options) -> ConversionResult:
+        """
+        Convert PDF to Markdown using OCR with enhanced math processing.
+        This method produces high-quality output with proper LaTeX math formatting.
+        Best for: academic papers, presentations with equations, technical documents.
+        """
+        logger.info(f"Converting PDF to Markdown (Math-Enhanced OCR): {input_file} -> {output_file}")
+        
+        warnings = []
+        ocr_lang = options.get('ocr_lang', 'eng')
+        dpi_multiplier = options.get('ocr_dpi', 3)  # Higher DPI for better math recognition
+        
+        # Setup Tesseract
+        if not self._setup_tesseract():
+            warnings.append("Tesseract not found, OCR may not work properly")
+        
+        try:
+            import pytesseract
+            from ai.math_ocr_processor import MathOCRProcessor
+            
+            doc = fitz.open(input_file)
+            
+            # Get document title from metadata or filename
+            metadata = doc.metadata
+            title = metadata.get('title', '') if metadata else ''
+            if not title:
+                title = Path(input_file).stem.replace('_', ' ')
+            
+            # Process all pages with high-resolution OCR
+            all_page_texts = []
+            
+            for page_num in range(len(doc)):
+                page = doc[page_num]
+                
+                # High-resolution rendering for better OCR
+                matrix = fitz.Matrix(dpi_multiplier, dpi_multiplier)
+                pix = page.get_pixmap(matrix=matrix)
+                img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+                
+                # OCR with settings optimized for academic content
+                custom_config = r'--oem 3 --psm 6 -c preserve_interword_spaces=1'
+                
+                try:
+                    text = pytesseract.image_to_string(img, lang=ocr_lang, config=custom_config)
+                    
+                    if text.strip():
+                        all_page_texts.append(f"## Page {page_num + 1}\n\n{text}")
+                    else:
+                        warnings.append(f"Page {page_num + 1}: No text detected via OCR")
+                        
+                except Exception as e:
+                    warnings.append(f"Page {page_num + 1}: OCR failed - {e}")
+            
+            num_pages = len(doc)
+            doc.close()
+            
+            # Combine all pages
+            raw_ocr_text = '\n\n---\n\n'.join(all_page_texts)
+            
+            # Apply math-enhanced processing
+            processor = MathOCRProcessor()
+            processed_content = processor.process(raw_ocr_text, title=title)
+            
+            # Write to file
+            with open(output_file, 'w', encoding='utf-8') as f:
+                f.write(processed_content)
+            
+            logger.info(f"Successfully converted PDF to Markdown (Math-Enhanced OCR): {output_file}")
+            return self._create_success_result(
+                input_file,
+                output_file,
+                'pdf',
+                'markdown',
+                warnings=warnings,
+                metadata={
+                    'pages': num_pages, 
+                    'method': 'math_enhanced_ocr',
+                    'dpi': dpi_multiplier * 72,
+                    'lang': ocr_lang
+                }
+            )
+            
+        except ImportError as e:
+            logger.warning(f"Math processor not available: {e}")
+            # Fallback to regular OCR
+            return self._pdf_to_markdown_ocr(input_file, output_file, **options)
+        except Exception as e:
+            logger.error(f"PDF to Markdown (Math-Enhanced OCR) conversion failed: {e}")
+            raise
+
+    def _pdf_to_markdown_llm(self, input_file: str, output_file: str, **options) -> ConversionResult:
+        """
+        Convert PDF to Markdown using OCR + LLM post-processing.
+        This produces the highest quality output with proper LaTeX math formatting.
+        
+        Requires one of:
+        - Ollama running locally (free, recommended)
+        - HuggingFace API key (free tier)
+        - Google Gemini API key (free tier)
+        """
+        logger.info(f"Converting PDF to Markdown (LLM-Enhanced): {input_file} -> {output_file}")
+        
+        warnings = []
+        ocr_lang = options.get('ocr_lang', 'eng')
+        dpi_multiplier = options.get('ocr_dpi', 3)  # Higher DPI for better OCR
+        llm_provider = options.get('llm_provider', 'auto')
+        
+        # Setup Tesseract
+        if not self._setup_tesseract():
+            warnings.append("Tesseract not found, OCR may not work properly")
+        
+        try:
+            import pytesseract
+            from ai.llm_post_processor import LLMPostProcessor
+            
+            # Initialize LLM processor
+            llm_config = {
+                'huggingface_api_key': options.get('huggingface_api_key'),
+                'google_api_key': options.get('google_api_key'),
+                'ollama_model': options.get('ollama_model'),
+                'ollama_host': options.get('ollama_host'),
+            }
+            llm_processor = LLMPostProcessor(provider=llm_provider, **llm_config)
+            
+            if not llm_processor.is_available():
+                warnings.append("No LLM provider available, falling back to rule-based processing")
+                return self._pdf_to_markdown_math_ocr(input_file, output_file, **options)
+            
+            logger.info(f"Using LLM provider: {llm_processor.provider_name}")
+            
+            doc = fitz.open(input_file)
+            
+            # Get document title
+            metadata = doc.metadata
+            title = metadata.get('title', '') if metadata else ''
+            if not title:
+                title = Path(input_file).stem.replace('_', ' ')
+            
+            # Process all pages with high-resolution OCR
+            all_page_texts = []
+            
+            for page_num in range(len(doc)):
+                page = doc[page_num]
+                
+                # High-resolution rendering
+                matrix = fitz.Matrix(dpi_multiplier, dpi_multiplier)
+                pix = page.get_pixmap(matrix=matrix)
+                img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+                
+                # OCR with optimized settings
+                custom_config = r'--oem 3 --psm 6 -c preserve_interword_spaces=1'
+                
+                try:
+                    text = pytesseract.image_to_string(img, lang=ocr_lang, config=custom_config)
+                    
+                    if text.strip():
+                        all_page_texts.append(f"=== Page {page_num + 1} ===\n\n{text}")
+                    else:
+                        warnings.append(f"Page {page_num + 1}: No text detected via OCR")
+                        
+                except Exception as e:
+                    warnings.append(f"Page {page_num + 1}: OCR failed - {e}")
+            
+            num_pages = len(doc)
+            doc.close()
+            
+            # Combine all pages
+            raw_ocr_text = '\n\n'.join(all_page_texts)
+            
+            # Process with LLM
+            logger.info("Processing with LLM (this may take a moment)...")
+            processed_content, llm_metadata = llm_processor.process_math_document(raw_ocr_text)
+            
+            # Add title if not present
+            if not processed_content.startswith('#'):
+                processed_content = f"# {title}\n\n{processed_content}"
+            
+            # Write to file
+            with open(output_file, 'w', encoding='utf-8') as f:
+                f.write(processed_content)
+            
+            logger.info(f"Successfully converted PDF to Markdown (LLM-Enhanced): {output_file}")
+            return self._create_success_result(
+                input_file,
+                output_file,
+                'pdf',
+                'markdown',
+                warnings=warnings,
+                metadata={
+                    'pages': num_pages,
+                    'method': 'llm_enhanced_ocr',
+                    'llm_provider': llm_metadata.get('provider'),
+                    'llm_chunks': llm_metadata.get('chunks', 1),
+                    'dpi': dpi_multiplier * 72,
+                    'lang': ocr_lang
+                }
+            )
+            
+        except ImportError as e:
+            logger.warning(f"LLM processor not available: {e}")
+            return self._pdf_to_markdown_math_ocr(input_file, output_file, **options)
+        except Exception as e:
+            logger.error(f"PDF to Markdown (LLM-Enhanced) conversion failed: {e}")
             raise

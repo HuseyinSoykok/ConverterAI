@@ -176,6 +176,9 @@ def convert_file():
             file_id = data.get('file_id')
             output_format = data.get('output_format')
             quality_check = data.get('quality_check', False)
+            use_ocr = data.get('use_ocr', False)
+            use_llm = data.get('use_llm', False)
+            llm_provider = data.get('llm_provider', 'auto')
             
             if not file_id or not output_format:
                 return jsonify({
@@ -226,6 +229,8 @@ def convert_file():
         }
         
         logger.info(f"Starting conversion: {file_id} -> {output_format}")
+        if use_ocr:
+            logger.info(f"OCR enabled, LLM: {use_llm}, Provider: {llm_provider}")
         
         # Perform conversion
         start_time = time.time()
@@ -234,7 +239,10 @@ def convert_file():
             input_format=input_format,
             output_format=output_format,
             output_file=str(output_file),
-            quality_check=quality_check
+            quality_check=quality_check,
+            use_ocr=use_ocr,
+            use_llm=use_llm,
+            llm_provider=llm_provider
         )
         
         processing_time = time.time() - start_time

@@ -8,7 +8,10 @@ let state = {
     fileName: null,
     fileFormat: null,
     outputFormat: null,
-    taskId: null
+    taskId: null,
+    useOcr: false,
+    useLlm: false,
+    llmProvider: 'auto'
 };
 
 // Format icons and labels
@@ -49,6 +52,14 @@ const newConversionBtn = document.getElementById('newConversionBtn');
 const errorSection = document.getElementById('errorSection');
 const errorMessage = document.getElementById('errorMessage');
 const retryBtn = document.getElementById('retryBtn');
+
+// OCR/LLM options
+const ocrOption = document.getElementById('ocrOption');
+const useOcrCheckbox = document.getElementById('useOcr');
+const llmOption = document.getElementById('llmOption');
+const useLlmCheckbox = document.getElementById('useLlm');
+const llmProviderSelect = document.getElementById('llmProviderSelect');
+const llmProviderDropdown = document.getElementById('llmProvider');
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
@@ -93,6 +104,40 @@ function initEventListeners() {
     
     // Retry button
     retryBtn.addEventListener('click', resetAll);
+    
+    // OCR checkbox
+    if (useOcrCheckbox) {
+        useOcrCheckbox.addEventListener('change', (e) => {
+            state.useOcr = e.target.checked;
+            // Show LLM option when OCR is enabled
+            if (llmOption) {
+                llmOption.style.display = e.target.checked ? 'flex' : 'none';
+                if (!e.target.checked) {
+                    useLlmCheckbox.checked = false;
+                    state.useLlm = false;
+                    llmProviderSelect.style.display = 'none';
+                }
+            }
+        });
+    }
+    
+    // LLM checkbox
+    if (useLlmCheckbox) {
+        useLlmCheckbox.addEventListener('change', (e) => {
+            state.useLlm = e.target.checked;
+            // Show provider select when LLM is enabled
+            if (llmProviderSelect) {
+                llmProviderSelect.style.display = e.target.checked ? 'block' : 'none';
+            }
+        });
+    }
+    
+    // LLM provider select
+    if (llmProviderDropdown) {
+        llmProviderDropdown.addEventListener('change', (e) => {
+            state.llmProvider = e.target.value;
+        });
+    }
 }
 
 // Drag and Drop Handlers
@@ -168,6 +213,13 @@ function displayFileInfo(data) {
 async function showConversionOptions(inputFormat) {
     conversionSection.style.display = 'block';
     
+    // Show OCR option for PDF and image files
+    if (ocrOption && ['pdf', 'png', 'jpg', 'jpeg', 'image'].includes(inputFormat.toLowerCase())) {
+        ocrOption.style.display = 'flex';
+    } else if (ocrOption) {
+        ocrOption.style.display = 'none';
+    }
+    
     try {
         const response = await fetch(`${API_BASE}/api/supported-conversions`);
         const data = await response.json();
@@ -225,8 +277,20 @@ async function startConversion() {
     }
     
     const qualityCheck = qualityCheckbox.checked;
+    const useOcr = useOcrCheckbox ? useOcrCheckbox.checked : false;
+    const useLlm = useLlmCheckbox ? useLlmCheckbox.checked : false;
+    const llmProvider = llmProviderDropdown ? llmProviderDropdown.value : 'auto';
     
-    showProgress('Dönüştürme başlatılıyor...', 30);
+    let progressMessage = 'Dönüştürme başlatılıyor...';
+    if (useOcr && useLlm) {
+        progressMessage = 'OCR + LLM ile dönüştürülüyor... (Bu işlem biraz zaman alabilir)';
+    } else if (useOcr) {
+        progressMessage = 'OCR ile dönüştürülüyor...';
+    } else if (useLlm) {
+        progressMessage = 'LLM ile iyileştiriliyor...';
+    }
+    
+    showProgress(progressMessage, 30);
     
     try {
         const response = await fetch(`${API_BASE}/api/convert`, {
@@ -237,7 +301,10 @@ async function startConversion() {
             body: JSON.stringify({
                 file_id: state.fileId,
                 output_format: state.outputFormat,
-                quality_check: qualityCheck
+                quality_check: qualityCheck,
+                use_ocr: useOcr,
+                use_llm: useLlm,
+                llm_provider: llmProvider
             })
         });
         
@@ -347,13 +414,24 @@ function resetAll() {
     resultSection.style.display = 'none';
     errorSection.style.display = 'none';
     
+    // Reset OCR/LLM options
+    if (ocrOption) ocrOption.style.display = 'none';
+    if (llmOption) llmOption.style.display = 'none';
+    if (llmProviderSelect) llmProviderSelect.style.display = 'none';
+    if (useOcrCheckbox) useOcrCheckbox.checked = false;
+    if (useLlmCheckbox) useLlmCheckbox.checked = false;
+    if (llmProviderDropdown) llmProviderDropdown.value = 'auto';
+    
     state = {
         fileId: null,
         fileName: null,
         fileFormat: null,
         outputFormat: null,
         taskId: null,
-        outputFile: null
+        outputFile: null,
+        useOcr: false,
+        useLlm: false,
+        llmProvider: 'auto'
     };
 }
 
